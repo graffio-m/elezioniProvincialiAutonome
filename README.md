@@ -1,4 +1,4 @@
-Elezioni comunali 2020: Conversione dati scrutini comunali nel formato del Ministero Interni 
+Elezioni provinciali 2023: Conversione dati scrutini provinciali nel formato del Ministero Interni 
 ==========
 
 Script per la lettura dei dati degli scrutini provenienti dalle regioni autonome e conversione in formato json con tracciato unifoirmato a quello del ministero.
