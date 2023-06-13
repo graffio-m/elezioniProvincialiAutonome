@@ -74,7 +74,7 @@ var_dump($dataVotiSindacoAr);
 /**
  * Lettura voti sindaco da file remoto
  */
-$fileDaRecuperare = REMOTE_SITE_TRENTO.'/'.'VotiSindaci.txt';
+$fileDaRecuperare = REMOTE_SITE_TRENTO.'/'.'VotiPresidenti.txt';
 $dataVotiSindacoAr = FileManagement::getFileFromRemote($fileDaRecuperare,$log);
 $dataVotiSindacoAr = FileManagement::csv_to_array($fileDaRecuperare,$log,';',false);
 $specificaLog[] = $fileDaRecuperare;
@@ -105,7 +105,7 @@ if (!$dataAffluenzaAr) {
  * Essendo iniziato lo scrutinio si può prendere l'ultimo aggiornamento dell'affluenza
  */
 
-$fileNameAffluenza = REMOTE_SITE_TRENTO.'/'.'Affluenza15-del-21-09.txt';
+$fileNameAffluenza = REMOTE_SITE_TRENTO.'/'.'Affluenza22.txt';
 $specificaLog[0] = $fileNameAffluenza;
 $dataAffluenzaAr = FileManagement::getFileFromRemote($fileNameAffluenza,$log);
 if (!$dataAffluenzaAr) {
@@ -154,7 +154,7 @@ if (!$dataVotiListeAr) {
 
 /**
  * trasformazione in array associativo VotiListe.
- * si accede ai dati dei vori delle liste tramite indice ID Sindaco 
+ * si accede ai dati dei voti delle liste tramite indice ID Sindaco 
  */
 $SindacoId = 0;
 foreach ($dataVotiListeAr as $dataVotiSingolaLista) {

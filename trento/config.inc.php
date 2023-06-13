@@ -45,8 +45,8 @@ define ('DATA_ELEZIONI', 30200920); // versione test
 /**
  * Costanti per l'upload su dl
  */ 
-define('MAKE_UPLOAD',TRUE);
-define('AGGIORNA_ENTI',TRUE);
+define('MAKE_UPLOAD',FALSE);
+define('AGGIORNA_ENTI',FALSE);
 
  define('UPLOAD_URL','http://10.99.36.78:40525');
 
@@ -72,8 +72,8 @@ define('FILE_PATH_CONVERTITO',CONV_DIR.PATH_PROV.PATH_PROV_TRENTO.PATH_COMUNI);
  /**
   *  Remote site Trento
   */
-  define('REMOTE_SITE_TRENTO', 'http://media.2020.elezionicomunali.tn.it');
-
+  define('REMOTE_SITE_TRENTO', 'http://media.elezioni-2018.provincia.tn.it/');
+  
 /**
  * Costanti Trento
  */
