@@ -64,21 +64,21 @@ $cod_prov = COD_PROV;
 $file2write_part = FILE_PATH_CONVERTITO;
 
 /**
- * Lettura voti sindaco da file locale
+ * Lettura voti Presidente da file locale
 
-$fileNameVotiSindaco = DOWN_DIR .'/'.'VotiSindaci.txt';
-$dataVotiSindacoAr = FileManagement::csv_to_array($fileNameVotiSindaco,$log,';');
-var_dump($dataVotiSindacoAr);
+$fileNameVotiPresidente = DOWN_DIR .'/'.'VotiPresidenti.txt';
+$dataVotiPresidenteAr = FileManagement::csv_to_array($fileNameVotiPresidente,$log,';');
+var_dump($dataVotiPresidenteAr);
  */
 
 /**
- * Lettura voti sindaco da file remoto
+ * Lettura voti Presidente da file remoto
  */
 $fileDaRecuperare = REMOTE_SITE_TRENTO.'/'.'VotiPresidenti.txt';
-$dataVotiSindacoAr = FileManagement::getFileFromRemote($fileDaRecuperare,$log);
-$dataVotiSindacoAr = FileManagement::csv_to_array($fileDaRecuperare,$log,';',false);
+$dataVotiPresidenteAr = FileManagement::getFileFromRemote($fileDaRecuperare,$log);
+$dataVotiPresidenteAr = FileManagement::csv_to_array($fileDaRecuperare,$log,';',false);
 $specificaLog[] = $fileDaRecuperare;
-if (!$dataVotiSindacoAr) {
+if (!$dataVotiPresidenteAr) {
 	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileDaRecuperare);
 //	Logger::error("Impossibile proseguire. Impossibile recuperare il file", $specificaLog);
 	die();
@@ -154,14 +154,14 @@ if (!$dataVotiListeAr) {
 
 /**
  * trasformazione in array associativo VotiListe.
- * si accede ai dati dei voti delle liste tramite indice ID Sindaco 
+ * si accede ai dati dei voti delle liste tramite indice ID Presidente 
  */
-$SindacoId = 0;
+$PresidenteId = 0;
 foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
-	if ($SindacoId <> $dataVotiSingolaLista['Sindaco Id'] ) {
-		$SindacoId = $dataVotiSingolaLista['Sindaco Id'];
+	if ($PresidenteId <> $dataVotiSingolaLista['Presidente Id'] ) {
+		$PresidenteId = $dataVotiSingolaLista['Presidente Id'];
 	}
-	$dataVotiListeHA[$SindacoId][] = $dataVotiSingolaLista;
+	$dataVotiListeHA[$PresidenteId][] = $dataVotiSingolaLista;
 }
 
 /**
@@ -176,16 +176,16 @@ $objectEnte = new enti();
 $tot_com = 0;
 
 /**
- * Cicla Voti Sindaco
+ * Cicla Voti Presidente
  * crea nuovo oggetto per ogni comune
- * Imposta dati generali (parte in new scrutinio, parte in setCandidato. Alcuni dati generali sono nel file dei voti del sindaco)
- * Imposta Voti lista per ogni sindaco in setVotiListeCandidato
+ * Imposta dati generali (parte in new scrutinio, parte in setCandidato. Alcuni dati generali sono nel file dei voti del Presidente)
+ * Imposta Voti lista per ogni Presidente in setVotiListeCandidato
  */
 
-foreach ($dataVotiSindacoAr as $singleDataVotiSindacoAr) {
-	if ($singleDataVotiSindacoAr['Istat Comune'] == $comuneInCorso) { //ricordarsi di controllare variabile più sicura
+foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
+	if ($singleDataVotiPresidenteAr['Istat Comune'] == $comuneInCorso) { //ricordarsi di controllare variabile più sicura
 		$objectComune->numeroCandidato = $objectComune->numeroCandidato + 1;
-		$objectComune->setCandidato($singleDataVotiSindacoAr);
+		$objectComune->setCandidato($singleDataVotiPresidenteAr);
 		// Aggiunge voti di lista per ogni candidato
 		$objectComune->setVotiListeCandidato($dataVotiListeHA);
 	} else {
@@ -208,13 +208,13 @@ foreach ($dataVotiSindacoAr as $singleDataVotiSindacoAr) {
 			// distrugge oggetto
 			unset($objectComune);
 		}
-		$comuneInCorso = $singleDataVotiSindacoAr['Istat Comune'];
+		$comuneInCorso = $singleDataVotiPresidenteAr['Istat Comune'];
 		// crea oggetto
 		$objectComune = new scrutinio($dataAffluenzaHA[$comuneInCorso]);
 		$tot_com++;
 
 		// Aggiungi candidato
-		$objectComune->setCandidato($singleDataVotiSindacoAr);
+		$objectComune->setCandidato($singleDataVotiPresidenteAr);
 
 		// Aggiunge voti di lista per ogni candidato
 		$objectComune->setVotiListeCandidato($dataVotiListeHA);
@@ -243,6 +243,10 @@ if (isset($objectComune)) { //->jsonObject->desc_com)) {
 	unset($objectComune);
 }
 
+/**
+ * probabilmente andrà aggiunto il totale dei voti per la provincia
+ * 
+ */
 
 /**
  * Scrive il file Enti
