@@ -14,7 +14,7 @@
  *    			Affluenza 19.00 del 20-09
  *    			Affluenza 23.00 del 20-09
  *    			Affluenza 15.00 finale del 21-09
- *    			Voti ai candidati Sindaco
+ *    			Voti ai candidati Presidente
  *    			Voti alle liste
  *    			Voti di preferenza
  */
