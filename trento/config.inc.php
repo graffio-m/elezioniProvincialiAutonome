@@ -56,8 +56,8 @@ define('DL_PATH','/dl/rainews/elezioni2020/PX/scrutiniG/DE/30200920/TE/08'); //v
 define('UPLOAD_ACTION','/action/push');
 define('POST_NAME','response.json');
 
-//define('DL_PATH_ENTI','dl/rainews/elezioni2020/PX/getentiG/DE/20200920/TE/08/'); // versione in produzione
-define('DL_PATH_ENTI','/dl/rainews/elezioni2020/PX/getentiG/DE/30200920/TE/08'); //versione di test
+//define('DL_PATH_ENTI','dl/rainews/elezioni2023/PX/getentiR/DE/20200920/TE/08/'); // versione in produzione
+define('DL_PATH_ENTI','/dl/rainews/elezioni2023/PX/getentiR/DE/20231021/TE/07'); //versione di test
 
 
 /**

@@ -114,6 +114,20 @@ if (!$dataAffluenzaAr) {
 	die();
 }
 
+/**
+ * Inizializzazione array per totale affluenza
+ */
+$dataAffluenzaProvinciaHA = array();
+$dataAffluenzaProvinciaHA['cod_prov'] = $cod_prov;
+$dataAffluenzaProvinciaHA['desc_prov'] = $desc_prov;
+$dataAffluenzaProvinciaHA['Sez.Pervenute'] = 0;
+$dataAffluenzaProvinciaHA['Sez.Totali'] = 0;
+$dataAffluenzaProvinciaHA['ElettoriM'] = 0;
+$dataAffluenzaProvinciaHA['ElettoriF'] = 0;
+$dataAffluenzaProvinciaHA['ElettoriT'] = 0;
+$dataAffluenzaProvinciaHA['VotantiM'] = 0;
+$dataAffluenzaProvinciaHA['VotantiF'] = 0;
+$dataAffluenzaProvinciaHA['VotantiT'] = 0;
 
 /**
  * trasformazione in array associativo Affluenza.
@@ -125,6 +139,18 @@ foreach ($dataAffluenzaAr as $comuneAffluenza) {
 		$comuneAffluenza['cod_com'] = substr($dataListaComuniHA[$CodIstatComune]['CODICE ELETTORALE'],-4);
 		$comuneAffluenza['desc_prov'] = $desc_prov;
 		$dataAffluenzaHA[$CodIstatComune] = $comuneAffluenza;
+
+		// Totale affluenza Provincia
+		$dataAffluenzaProvinciaHA['Sez.Pervenute'] += $comuneAffluenza['Sez.Pervenute'];
+		$dataAffluenzaProvinciaHA['Sez.Totali'] += $comuneAffluenza['Sez.Totali'];
+		$dataAffluenzaProvinciaHA['ElettoriM'] += $comuneAffluenza['ElettoriM'];
+		$dataAffluenzaProvinciaHA['ElettoriF'] += $comuneAffluenza['ElettoriF'];
+		$dataAffluenzaProvinciaHA['ElettoriT'] += $comuneAffluenza['ElettoriT'];
+		$dataAffluenzaProvinciaHA['VotantiM'] += $comuneAffluenza['VotantiM'];
+		$dataAffluenzaProvinciaHA['VotantiF'] += $comuneAffluenza['VotantiF'];
+		$dataAffluenzaProvinciaHA['VotantiT'] += $comuneAffluenza['VotantiT'];
+
+
 }
 
 /**
@@ -187,7 +213,7 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 		$objectComune->numeroCandidato = $objectComune->numeroCandidato + 1;
 		$objectComune->setCandidato($singleDataVotiPresidenteAr);
 		// Aggiunge voti di lista per ogni candidato
-		$objectComune->setVotiListeCandidato($dataVotiListeHA);
+		$objectComune->setVotiListeCandidato($dataVotiListeHA); 
 	} else {
 		if (isset($objectComune)) { //->jsonObject->desc_com)) {
 			// scrive file
@@ -218,6 +244,13 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 
 		// Aggiunge voti di lista per ogni candidato
 		$objectComune->setVotiListeCandidato($dataVotiListeHA);
+
+		// Aggiorni i dati della provincia
+		if (isset($objectProvincia)) {
+			$objectProvincia = new scrutinio($dataAffluenzaHA[$comuneInCorso]);
+
+		}
+
 
 	}
 }
