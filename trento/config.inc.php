@@ -50,24 +50,32 @@ define('AGGIORNA_ENTI',FALSE);
 
  define('UPLOAD_URL','http://10.99.36.78:40525');
 
- //define('DL_PATH','dl/rainews/elezioni2020/PX/scrutiniG/DE/20200920/TE/08'); // versione in produzione
-define('DL_PATH','/dl/rainews/elezioni2020/PX/scrutiniG/DE/30200920/TE/08'); //versione di test
+ //define('DL_PATH','dl/rainews/elezioni2023/PX/scrutiniG/DE/20200920/TE/08'); // versione in produzione
+define('DL_PATH','/dl/rainews/elezioni2023/PX/scrutiniG/DE/30200920/TE/08'); //versione di test
 
 define('UPLOAD_ACTION','/action/push');
 define('POST_NAME','response.json');
 
-//define('DL_PATH_ENTI','dl/rainews/elezioni2023/PX/getentiR/DE/20200920/TE/08/'); // versione in produzione
-define('DL_PATH_ENTI','/dl/rainews/elezioni2023/PX/getentiR/DE/20231021/TE/07'); //versione di test
+//define('DL_PATH_ENTI','dl/rainews/elezioni2023/PX/getentiR/DE/20231021/TE/08/'); // versione in produzione
+define('DL_PATH_ENTI','/dl/rainews/elezioni2023/PX/getentiR/DE/20231021/TE/08'); //versione di test
 
 
 /**
- * Struttura del path in cui scrivere i json dei dati
+ * Struttura del path in cui scrivere i json dei dati dei comuni
  */  
 define('PATH_PROV','/PR');
 define('PATH_PROV_TRENTO','/083');
 define('PATH_COMUNI','/CM/');
 
 define('FILE_PATH_CONVERTITO',CONV_DIR.PATH_PROV.PATH_PROV_TRENTO.PATH_COMUNI);
+
+/**
+ * Struttura del path in cui scrivere i json dei dati della provincia
+ */  
+define('PATH_PROVINCIA','/PR/');
+
+define('FILE_PATH_PROVINCIA_CONVERTITO',CONV_DIR.PATH_PROV.PATH_PROV_TRENTO.PATH_COMUNI);
+
 
  /**
   *  Remote site Trento

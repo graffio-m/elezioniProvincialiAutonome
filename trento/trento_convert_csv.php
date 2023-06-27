@@ -191,7 +191,7 @@ foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
 }
 
 /**
- * Creazione oggetto x json
+ * Creazione oggetto ENTI x json
  * modello Ministero dell'Interno
  * scrutinio_comunali_1t.json
  */
@@ -214,6 +214,11 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 		$objectComune->setCandidato($singleDataVotiPresidenteAr);
 		// Aggiunge voti di lista per ogni candidato
 		$objectComune->setVotiListeCandidato($dataVotiListeHA); 
+
+		// Aggiorna provincia
+		$objectProvincia->numeroCandidatoProvincia = $objectProvincia->numeroCandidatoProvincia + 1;
+		$objectProvincia->setCandidatoProvincia($singleDataVotiPresidenteAr);
+
 	} else {
 		if (isset($objectComune)) { //->jsonObject->desc_com)) {
 			// scrive file
@@ -233,6 +238,9 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 
 			// distrugge oggetto
 			unset($objectComune);
+			$objectProvincia->numeroCandidatoProvincia = 0;
+
+
 		}
 		$comuneInCorso = $singleDataVotiPresidenteAr['Istat Comune'];
 		// crea oggetto
@@ -245,11 +253,13 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 		// Aggiunge voti di lista per ogni candidato
 		$objectComune->setVotiListeCandidato($dataVotiListeHA);
 
-		// Aggiorni i dati della provincia
-		if (isset($objectProvincia)) {
-			$objectProvincia = new scrutinio($dataAffluenzaHA[$comuneInCorso]);
+		// Aggiorna i dati della provincia
+		if (!isset($objectProvincia)) {
+			$objectProvincia = new scrutinioProvincia($dataAffluenzaProvinciaHA);
+		} 
+		$objectProvincia->setCandidatoProvincia($singleDataVotiPresidenteAr);
+		// $objectProvincia->setVotiListeCandidatoProvincia($dataVotiListeHA);
 
-		}
 
 
 	}
@@ -274,12 +284,31 @@ if (isset($objectComune)) { //->jsonObject->desc_com)) {
 
 	// distrugge oggetto
 	unset($objectComune);
+
 }
 
 /**
- * probabilmente andrà aggiunto il totale dei voti per la provincia
- * 
- */
+ *  Scrive la provincia
+ */ 
+if (isset($objectProvincia)) {
+
+	// scrive file
+	$file2write = $file2write_part.$cod_prov.'/response.json';
+//			$file2write = $file2write_part.$comuneInCorso.'response.json';
+	FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
+
+	//Upload file to dl
+	if (MAKE_UPLOAD) {
+		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
+	}
+	echo $tot_com . ': '.$objectComune->jsonObject->int->cod_com.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '<br>';
+
+	//Aggiunge comune a Ente
+	$objectEnte->setComune($objectComune->jsonObject);
+
+	// distrugge oggetto
+	unset($objectComune);
+}
 
 /**
  * Scrive il file Enti
