@@ -81,21 +81,21 @@ class scrutinio {
     /**
      * @abstract Imposta i dati delle liste collegate al candidato Presidente. chiama le funzioni di impostazioni specifiche di ogni regione/provincia
      *
-     * @param array $dataVotiListeHA
+     * @param array $dataVotiListeAr
      * @return void
      */
-    public function setVotiListeCandidato($dataVotiListeHA) {
-        $idPresidente = $this->jsonObject->cand[$this->numeroCandidato]->id_presidente;
+    public function setVotiListeCandidato($dataVotiListeAr) {
+        $idPresidente = $this->jsonObject->cand[$this->numeroCandidato]->id_Presidente;
         if (!isset($this->jsonObject->cand[$this->numeroCandidato]->liste)) {
             $this->jsonObject->cand[$this->numeroCandidato]->liste = array();
         }
 
         switch ($this->jsonObject->int->desc_prov) {
             case 'TRENTO':
-                $this->setVotiListeCandidatoTrento($dataVotiListeHA);
+                $this->setVotiListeCandidatoTrento($dataVotiListeAr);
                 break;
             case 'BOLZANO':
-                $this->setVotiListeCandidatoBolzano($dataVotiListeHA);
+                $this->setVotiListeCandidatoBolzano($dataVotiListeAr);
                 break;
         }
 
@@ -130,32 +130,43 @@ class scrutinio {
      * @return void
      */
 
-    public function setVotiListeCandidatoTrento($dataVotiListeHA) {
+    public function setVotiListeCandidatoTrento($dataVotiListeAr) {
         $idPresidente = $this->jsonObject->cand[$this->numeroCandidato]->id_Presidente;
+        $presidenteInCorso = null;
         /**
          * Ciclare $dataVotiListeHA[$idPresidente]
+         * 
+         * 
+         * RIPRENDERE DA QUI
          */
-        foreach ($dataVotiListeHA[$idPresidente] as $singolaLista) {
-            if (!array_key_exists($this->numeroLista, $this->jsonObject->cand[$this->numeroCandidato]->liste)) {
-                $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista] = new stdClass();
-            }
-            $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->descr_lista = $singolaLista['Nome Lista']; 
-            $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->voti = $singolaLista['Voti']; 
-            $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->pos = $singolaLista['Progressivo Lista']; 
+        foreach ($dataVotiListeAr as $singolaLista) {
+            if (($presidenteInCorso == null) && ($presidenteInCorso != $idPresidente)) {
+                $presidenteInCorso = $idPresidente;
+            }    
+                if ($this->jsonObject->int->cod_ISTAT == $singolaLista['Istat Comune']) {
 
-            $percVotiLista = 0;
-            if ($singolaLista['Voti'] > 0 && $this->jsonObject->int->vot_t > 0) {
-                $percVotiLista = round((($singolaLista['Voti']/$this->jsonObject->int->vot_t)*100),2);
-            }
-            $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->perc = $percVotiLista; 
-
-            $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->img_lis = '';                
-            $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->seggi = 0; 
-            $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->sort_lis = 0; 
-
-
-            $this->numeroLista++;
-
+                    if (!array_key_exists($this->numeroLista, $this->jsonObject->cand[$this->numeroCandidato]->liste)) {
+                        $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista] = new stdClass();
+    
+                    }
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->descr_lista = $singolaLista['Nome Lista']; 
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->voti = $singolaLista['Voti']; 
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->pos = $singolaLista['Progressivo Lista']; 
+    
+                    $percVotiLista = 0;
+                    if ($singolaLista['Voti'] > 0 && $this->jsonObject->int->vot_t > 0) {
+                        $percVotiLista = round((($singolaLista['Voti']/$this->jsonObject->int->vot_t)*100),2);
+                    }
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->perc = $percVotiLista; 
+    
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->img_lis = '';                
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->seggi = 0; 
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->sort_lis = 0; 
+    
+    
+                    $this->numeroLista++;
+                }
+    
         }
 
     } 
@@ -417,7 +428,7 @@ class enti {
 
             }
         }
-
+        
 
 }
 
@@ -466,6 +477,18 @@ class enti {
                 $this->jsonObject->int->vot_t = $dataAffluenzaProvinciaHA['VotantiT'];
 
                 $this->jsonObject->int->dt_agg = date("YmdHis");
+                $percVoti = round((($this->jsonObject->int->vot_t/$this->jsonObject->int->ele_t)*100),2);
+                $this->jsonObject->int->perc_vot = $percVoti;
+
+                // Inizializzazione totali
+                $this->jsonObject->int->sz_tot = 0;
+                $this->jsonObject->int->perv = 0;
+                $this->jsonObject->int->sz_p_cons = 0;
+                $this->jsonObject->int->sk_bianche = 0;
+                $this->jsonObject->int->sk_nulle = 0;
+                $this->jsonObject->int->sk_contestate = 0;
+
+
             break;
             case 'BOLZANO':
 
@@ -693,23 +716,38 @@ class enti {
      * PROVINCIA DI TRENTO
      */
     public function setCandidatoProvinciaTrento($candidatoAr) {
-//        foreach ($this->jsonObject->cand as $candidatoTMP) {
-            // if (!array_key_exists($this->jsonObject->cand[$this->numeroCandidatoProvincia]['pos'],$this->jsonObject->cand[$this->numeroCandidatoProvincia])) {
+
+
             if (!property_exists($this->jsonObject->cand[$this->numeroCandidatoProvincia], 'pos')) {
-                    $this->jsonObject->cand[$this->numeroCandidatoProvincia]->cogn = $candidatoAr['Cognome']; 
+
+
+                // Aggiornamento totali 
+
+            // Aggiornamento dati complessivi della provincia
+
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->cogn = $candidatoAr['Cognome']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nome = $candidatoAr['Nome']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->a_nome = $candidatoAr['Nome Detto']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->pos = $candidatoAr['Progressivo Presidente']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->id_Presidente = $candidatoAr['Presidente Id']; 
 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti = $candidatoAr['Voti']; 
+
+                // dati necessari per calcolo finale percentuale voti
                 $percVoti = 0;
                 $votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['Schede Bianche'] + $candidatoAr['Schede nulle o contenenti solo voti nulli'] + $candidatoAr['Schede contestate e non attribuite']);
-        
+
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->bianche = $candidatoAr['Schede Bianche']; 
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nulle = $candidatoAr['Schede nulle o contenenti solo voti nulli']; 
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nonAttribuite = $candidatoAr['Schede contestate e non attribuite'];
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->votiValidi = $votiValidi;
+
                 if ($candidatoAr['Voti'] > 0 && $this->jsonObject->int->vot_t > 0) {
                     $percVoti = round((($candidatoAr['Voti']/$votiValidi)*100),2);
                 }
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->perc = $percVoti; 
+
+                // dati non disponibili, ma proprietà necessarie per la compatibilità con json 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->d_nasc = ''; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->l_nasc = ''; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->eletto = ''; 
@@ -725,30 +763,44 @@ class enti {
             } else {
                 // se già impostato il candidato vanno addizionati i voti...
 
+                //Anagrafica
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->cogn = $candidatoAr['Cognome']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nome = $candidatoAr['Nome']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->a_nome = $candidatoAr['Nome Detto']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->pos = $candidatoAr['Progressivo Presidente']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->id_Presidente = $candidatoAr['Presidente Id']; 
 
+                // Voti
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti += $candidatoAr['Voti']; 
+
                 $percVoti = 0;
                 $votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['Schede Bianche'] + $candidatoAr['Schede nulle o contenenti solo voti nulli'] + $candidatoAr['Schede contestate e non attribuite']);
-        
-                if ($candidatoAr['Voti'] > 0 && $this->jsonObject->int->vot_t > 0) {
-                    $percVoti = round((($candidatoAr['Voti']/$votiValidi)*100),2);
+
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->bianche += $candidatoAr['Schede Bianche']; 
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nulle += $candidatoAr['Schede nulle o contenenti solo voti nulli']; 
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nonAttribuite += $candidatoAr['Schede contestate e non attribuite'];
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->votiValidi += $votiValidi;
+
+                if ($this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti > 0 && $this->jsonObject->int->vot_t > 0) {
+                    $percVoti = round((($this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti/$votiValidi)*100),2);
                 }
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->perc = $percVoti; 
+
+            /**
+             *  Dati inizializzati la prima volta che viene impostato il candidato  - NON necessario eseguirlo di nuovo
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->d_nasc = ''; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->l_nasc = ''; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->eletto = ''; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->sg_ass = 0; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->sort_coal = null; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->sg_sort_coal = null; 
+            */
+            $this->jsonObject->cand[$this->numeroCandidatoProvincia]->sg_sort_coal = null;
+                
         
                 /** Duplicato di voti e perc
                  */
-                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->tot_vot_lis = $candidatoAr['Voti']; 
+                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->tot_vot_lis = $this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->perc_lis = $percVoti; 
 
             }
@@ -757,42 +809,28 @@ class enti {
 
 
     /**
-     * Effettua i calcoli sulle percentuali dei vori 
+     * Effettua i calcoli sulle percentuali dei voti 
      */
     public function setCalcoliProvinciaTrento($candidatoAr) {
 
         /**
          *  dati generali
-         *  A Trento sono ripetuti nel record di ogni candidato Presidente
+         *  A Trento sono ripetuti nel record di ogni candidato Presidente nei risultati comunali
          */
 
-        if (!isset($this->jsonObject->int->sz_tot)) {
-            $this->jsonObject->int->sz_tot = $candidatoAr['Sez.Totali'];
-            $this->jsonObject->int->sz_tot = $candidatoAr['Sez.Totali'];
-            $this->jsonObject->int->sz_tot = $candidatoAr['Sez.Totali'];
-            $this->jsonObject->int->sz_p_sind = $candidatoAr['Sez.Pervenute'];
-            $this->jsonObject->int->sz_p_cons = $candidatoAr['Sez.Pervenute'];
-            $this->jsonObject->int->sk_bianche = $candidatoAr['Schede Bianche'];
-            $this->jsonObject->int->sk_nulle = $candidatoAr['Schede nulle o contenenti solo voti nulli'];
-            $this->jsonObject->int->sk_contestate = $candidatoAr['Schede contestate e non attribuite'];
+         $this->jsonObject->int->sz_p_cons += $candidatoAr['Sez.Pervenute'];
+         $this->jsonObject->int->sk_bianche += $candidatoAr['Schede Bianche'];
+         $this->jsonObject->int->sk_nulle += $candidatoAr['Schede nulle o contenenti solo voti nulli'];
+         $this->jsonObject->int->sk_contestate += $candidatoAr['Schede contestate e non attribuite'];
 
-            $percVoti = 0;
-            if ($this->jsonObject->int->ele_t > 0 && $this->jsonObject->int->vot_t > 0) {
-                $percVoti = round((($this->jsonObject->int->vot_t/$this->jsonObject->int->ele_t)*100),2);
-            }
-            $this->jsonObject->int->perc_vot = $percVoti;
-            $this->jsonObject->int->fine_rip = '';
-            $this->jsonObject->int->sg_spett = 0;
-            $this->jsonObject->int->sg_ass = 0;
-            $this->jsonObject->int->tot_vot_cand = 0;
-            $this->jsonObject->int->tot_vot_lis = 0;
-            $this->jsonObject->int->non_valid = '';
-            $this->jsonObject->int->data_prec_elez = '';
-            $this->jsonObject->int->reg_sto = REG_STO;
-            $this->jsonObject->int->prov_sto = $this->jsonObject->int->cod_prov;
-            $this->jsonObject->int->comu_sto = $this->jsonObject->int->cod_com;
+         $this->jsonObject->int->sz_tot += $candidatoAr['Sez.Totali'];
+         $this->jsonObject->int->sz_perv += $candidatoAr['Sez.Pervenute'];
 
-        }
+         $percVoti = 0;
+         if ($this->jsonObject->int->ele_t > 0 && $this->jsonObject->int->vot_t > 0) {
+             $percVoti = round((($this->jsonObject->int->vot_t/$this->jsonObject->int->ele_t)*100),2);
+         }
+         $this->jsonObject->int->perc_vot = $percVoti;
 
     }
 
