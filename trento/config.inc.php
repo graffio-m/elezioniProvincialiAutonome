@@ -46,7 +46,7 @@ define ('DATA_ELEZIONI', 30200920); // versione test
  * Costanti per l'upload su dl
  */ 
 define('MAKE_UPLOAD',FALSE);
-define('AGGIORNA_ENTI',FALSE);
+define('AGGIORNA_ENTI',TRUE);
 
  define('UPLOAD_URL','http://10.99.36.78:40525');
 

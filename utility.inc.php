@@ -328,3 +328,59 @@ class FileManagement {
 //        Logger::notice("file salvato correttamente:", $specificheLog);
     }    
 }
+
+class Ordinamenti {
+    /**
+     * @abstract Classe per gestire ordinamenti di array e/o di oggetti
+     */
+
+
+   /**
+     * Utilità per ordinamento voti di lista per presidente
+     * @return array
+
+     */
+/*        
+    public static function ordinaPerPresidente($dataVotiListeInCorsoAr) {
+        usort($dataVotiListeInCorsoAr, function($a,$b) {
+            return strcmp($a['Presidente Id'], $b['Presidente Id']);
+/*             if ($a['Presidente Id'] == $b['Presidente Id']) {
+                return 0;
+            }
+            return ($a['Presidente Id'] < $b['Presidente Id']) ? -1 : 1;
+         });
+}
+*/   
+
+    public static function OrdinaPerChiaveValore(&$array, $key, $sortOrder = SORT_ASC) {
+        $sorter = array();
+        $ret = array();
+        reset($array);
+
+        foreach ($array as $index => $value) {
+            $sorter[$index] = $value[$key];
+        }
+
+        array_multisort($sorter, $sortOrder, $array);
+    }
+
+    public static function OrdinaOggetti($oggetti) {
+        // Ordina gli oggetti utilizzando la funzione di confronto personalizzata
+        usort($oggetti, function($a,$b) {
+            if ($a->voti == $b->voti) {
+                return 0;
+            }
+            return ($a->voti < $b->voti) ? -1 : 1;
+        
+        });
+
+    }
+    /*
+    public function static confrontaPerVoti($a, $b) {
+        if ($a->voti == $b->voti) {
+            return 0;
+        }
+        return ($a->voti < $b->voti) ? -1 : 1;
+    }
+    */
+}

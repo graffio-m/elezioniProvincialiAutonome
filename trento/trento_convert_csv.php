@@ -155,8 +155,8 @@ foreach ($dataAffluenzaAr as $comuneAffluenza) {
 }
 
 /**
- * Lettura voti Liste
-$fileNameVotiListe = DOWN_DIR.'/'.'VotiListe.txt';
+ * Lettura voti Liste da locale
+$fileNameVotiListe = DOWN_DIR.'/'.'VotiListe.csv';
 $dataVotiListeAr = FileManagement::csv_to_array($fileNameVotiListe,';');
 $specificaLog[] = $fileNameVotiListe;
 if (!$dataVotiListeAr) {
@@ -191,6 +191,8 @@ foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
 	$dataVotiListeHA[$PresidenteId][] = $dataVotiSingolaLista;
 }
 
+ksort($dataVotiListeHA);
+
 /**
  * Creazione oggetto ENTI x json
  * modello Ministero dell'Interno
@@ -210,17 +212,17 @@ $tot_com = 0;
  */
 
 foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
-	if ($singleDataVotiPresidenteAr['Istat Comune'] == $comuneInCorso) { //ricordarsi di controllare variabile più sicura
+	if ($singleDataVotiPresidenteAr['Istat Comune'] == $comuneInCorso) { 
 		$objectComune->numeroCandidato = $objectComune->numeroCandidato + 1;
 		$objectComune->setCandidato($singleDataVotiPresidenteAr);
 		// Aggiunge voti di lista per ogni candidato
-		$objectComune->setVotiListeCandidato($dataVotiListeAr); 
+		$objectComune->setVotiListeCandidato($dataVotiListeAr, $comuneInCorso); 
 //		$objectComune->setVotiListeCandidato($dataVotiListeHA); 
 
 		// Aggiorna provincia
 		$objectProvincia->numeroCandidatoProvincia = $objectProvincia->numeroCandidatoProvincia + 1;
 		$objectProvincia->setCandidatoProvincia($singleDataVotiPresidenteAr);
-		$objectProvincia->setVotiListeCandidatoProvincia($dataVotiListeHA); 
+		$objectProvincia->setVotiListeCandidatoProvincia($dataVotiListeHA, $comuneInCorso); 
 
 	} else {
 		if (isset($objectComune)) { //->jsonObject->desc_com)) {
@@ -258,7 +260,7 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 		$objectComune->setCandidato($singleDataVotiPresidenteAr);
 
 		// Aggiunge voti di lista per ogni candidato
-		$objectComune->setVotiListeCandidato($dataVotiListeAr); 
+		$objectComune->setVotiListeCandidato($dataVotiListeAr, $comuneInCorso); 
 //		$objectComune->setVotiListeCandidato($dataVotiListeHA); 
 
 		// Aggiorna i dati della provincia
@@ -266,7 +268,7 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 			$objectProvincia = new scrutinioProvincia($dataAffluenzaProvinciaHA);
 		} 
 		$objectProvincia->setCandidatoProvincia($singleDataVotiPresidenteAr);
-		//$objectProvincia->setVotiListeCandidatoProvincia($dataVotiListeHA);
+		$objectProvincia->setVotiListeCandidatoProvincia($dataVotiListeHA, $comuneInCorso);
 
 
 
@@ -303,6 +305,7 @@ if (isset($objectProvincia)) {
 	// scrive file
 	$file2write = $file2write_provincia_part.'/response.json';
 //			$file2write = $file2write_part.$comuneInCorso.'response.json';
+	Ordinamenti::OrdinaOggetti($objectProvincia->jsonObject->cand);
 	FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
 
 	//Upload file to dl
