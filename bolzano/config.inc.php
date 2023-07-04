@@ -77,7 +77,7 @@ define('FILE_PATH_CONVERTITO',CONV_DIR.PATH_PROV.PATH_PROV_BOLZANO.PATH_COMUNI);
   *  Remote site Bolzano
   */
 //  define('REMOTE_SITE_BOLZANO', 'https://press.elezionicomunali.bz.it/'); // versione in produzione
-define('REMOTE_SITE_BOLZANO', 'https://test-press.elezionicomunali.bz.it/'); // versione test
+define('REMOTE_SITE_BOLZANO', 'https://civis.bz.it/vote/landtag2018/results/elections/'); // versione test
 
 /**
  * Costanti Bolzano
