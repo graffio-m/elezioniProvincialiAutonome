@@ -364,9 +364,9 @@ class Ordinamenti {
         array_multisort($sorter, $sortOrder, $array);
     }
 
-    public static function OrdinaOggetti($oggetti) {
+    public static function OrdinaOggetti($arrayOggetti) {
         // Ordina gli oggetti utilizzando la funzione di confronto personalizzata
-        usort($oggetti, function($a,$b) {
+        usort($arrayOggetti, function($a,$b) {
             if ($a->voti == $b->voti) {
                 return 0;
             }

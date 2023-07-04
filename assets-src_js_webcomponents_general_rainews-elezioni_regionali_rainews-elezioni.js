@@ -89,6 +89,7 @@ export class Elezioni extends ElezioniBase {
   getRegionName() {
     switch (this.qRegione) {
       case '03': return 'Lombardia';
+      case '04': return 'Trentino Alto Adige';
       case '12': return 'Lazio';
       default: return '';
     }

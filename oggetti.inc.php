@@ -416,6 +416,13 @@ class enti {
                     $this->jsonObject->enti[1]->dt_agg = date("YmdHis");
                     $this->jsonObject->enti[1]->tipo_comune = null;
 
+                    $this->jsonObject->enti[1] = new stdClass();
+                    $this->jsonObject->enti[1]->desc = 'PROVINCIA AUTONOMA TRENTO';
+                    $this->jsonObject->enti[1]->cod = '040830000';
+                    $this->jsonObject->enti[1]->tipo = 'CR';
+                    $this->jsonObject->enti[1]->dt_agg = date("YmdHis");
+                    $this->jsonObject->enti[1]->tipo_comune = null;
+
                     $this->numeroEnte = 2;
                 break;    
 
@@ -658,7 +665,7 @@ class enti {
                     
 
                     $percVotiLista = 0;
-                    if ($singolaLista['Voti'] > 0 && $this->jsonObject->int->vot_t > 0) {
+                    if ($this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->voti > 0 && $this->jsonObject->int->vot_t > 0) {
                         $percVotiLista = round((($this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->voti/$this->jsonObject->int->vot_t)*100),2);
                     }
                     $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->perc = $percVotiLista; 

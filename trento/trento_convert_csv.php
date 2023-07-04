@@ -229,6 +229,11 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 
 			$objectProvincia->setCalcoliProvinciaTrento($singleDataVotiPresidenteAr);
 
+			//ordina per voti
+			$cand = $objectComune->jsonObject->cand; 
+			usort($cand, 'confrontaVoti');
+			$objectComune->jsonObject->cand = $cand; 
+
 			// scrive file
 			$cod_com = $objectComune->jsonObject->int->cod_com;
 			$file2write = $file2write_part.$cod_com.'/response.json';
@@ -277,8 +282,16 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 /* Scrive ultimo comune
 */
 if (isset($objectComune)) { //->jsonObject->desc_com)) {
+
+	//ordina per voti
+	$cand = $objectComune->jsonObject->cand; 
+	usort($cand, 'confrontaVoti');
+//	var_dump($cand);die();
+	$objectComune->jsonObject->cand = $cand; 
+
 	// scrive file
 	$cod_com = $objectComune->jsonObject->int->cod_com;
+	
 	$file2write = $file2write_part.$cod_com.'/response.json';
 //			$file2write = $file2write_part.$comuneInCorso.'response.json';
 	FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
@@ -305,7 +318,15 @@ if (isset($objectProvincia)) {
 	// scrive file
 	$file2write = $file2write_provincia_part.'/response.json';
 //			$file2write = $file2write_part.$comuneInCorso.'response.json';
-	Ordinamenti::OrdinaOggetti($objectProvincia->jsonObject->cand);
+	$cand = $objectProvincia->jsonObject->cand;
+
+//	Ordinamenti::OrdinaOggetti($cand);
+	// Ordina l'array di oggetti secondo la proprietà "voti"
+	usort($cand, 'confrontaVoti');
+
+//	var_dump($cand);die();
+	$objectProvincia->jsonObject->cand = $cand;
+
 	FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
 
 	//Upload file to dl
@@ -331,5 +352,15 @@ if (AGGIORNA_ENTI) {
 	}
 	
 }
+
+// Funzione di confronto per l'ordinamento
+function confrontaVoti($a, $b) {
+    if ($a->voti == $b->voti) {
+        return 0;
+    }
+//    return ($a->voti < $b->voti) ? -1 : 1; // ascendente
+	return ($a->voti < $b->voti) ? 1 : -1; // discendente
+}
+
 
 echo "<h2>Conversione della provincia di Trento terminata con successo</h2>";
