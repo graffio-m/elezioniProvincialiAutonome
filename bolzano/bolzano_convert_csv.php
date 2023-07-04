@@ -4,19 +4,23 @@
  * PHP version >= 5.0
  *
  * @author		Maurizio Mazzoneschi <graffio@lynxlab.com>
- * @copyright	Copyright (c) 2020
+ * @copyright	Copyright (c) 2023
  * @license		http://www.gnu.org/licenses/gpl-3.0.html GNU Public License v.3
  * @version		0.1
  * 
- * @abstract    Bplzano data conversion
+ * @abstract    Bolzano data conversion
  * 				csv --> json
  * 
- *    			Affluenza 19.00 del 20-09
- *    			Affluenza 23.00 del 20-09
- *    			Affluenza 15.00 finale del 21-09
- *    			Voti ai candidati Sindaco
+ *    			Affluenza data aggiornamento contenuta nel file
  *    			Voti alle liste
  *    			Voti di preferenza
+ * 
+ * NOTA: per consentire la rappresentazione senza modifiche agli script di front-end i dati del candidato contengono quelli della lista 
+ *       mentre i dati delle liste di ogni candidato (che in realtà è una lista) contengono i dati dei voti dei candidati per ogni lista
+ * 
+ *       La legge elettorale per l'elezione del consiglio provinciale della Provincia Autonoma di Bolzano è un proporzionale puro. 
+ *         
+ * 
  */
 
 include_once 'config.inc.php';
@@ -61,53 +65,14 @@ if (!$dataListaCandidatureAr) {
 $file2write_part = FILE_PATH_CONVERTITO;
 
 
-/**
- * Lettura COLLEGAMENTI da file remoto
- */
-$fileDaRecuperare = REMOTE_SITE_BOLZANO.'/'.'COLLEGAMENTI.CSV'; 
-$dataCollegamentiAr = FileManagement::csv_to_array($fileDaRecuperare,$log,';',false);
-if (!$dataCollegamentiAr) {
-	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileDaRecuperare);
-	die();
-}
-/**
- * trasformazione COLLEGAMENTI in array associativo
- * si accede con indice composta da: COMUNEISTAT + ORDINELISTA
- */
-
-$comuneIstatTmp = '0';
-$ordineLista = '0';
-foreach ($dataCollegamentiAr as $dataSingoloCollegamento) {
-	if ($comuneIstatTmp <> $dataSingoloCollegamento['COMUNEISTAT']) {
-        $comuneIstatTmp = $dataSingoloCollegamento['COMUNEISTAT'];
-    }
-    if ($ordineLista <> $dataSingoloCollegamento['ORDINELISTA']) {
-        $ordineLista = $dataSingoloCollegamento['ORDINELISTA'];
-    } 
-    $dataCollegamentiHA[$comuneIstatTmp.$ordineLista] = $dataSingoloCollegamento;
-}
-
-//var_dump($dataCollegamentiHA);die();
-
-/**
- * Lettura voti sindaco da file remoto
- */
-$fileDaRecuperare = REMOTE_SITE_BOLZANO.'/'.'VOTISINDACI-SUM.CSV'; 
-//$dataVotiSindacoAr = FileManagement::getFileFromRemote($fileDaRecuperare,$log);
-$dataVotiSindacoAr = FileManagement::csv_to_array($fileDaRecuperare,$log,';',false);
-if (!$dataVotiSindacoAr) {
-	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileDaRecuperare);
-	die();
-}
-//var_dump($dataVotiSindacoAr);die();
 
 /**
  * lettura Affluenza.
  * lettura da filesystem
 */
 //$fileNameAffluenza = DOWN_DIR.'/'.'AFFLUENZE-SUM.CSV';
-$fileNameAffluenza = REMOTE_SITE_BOLZANO.'/'.'AFFLUENZE-SUM.CSV';
-$dataAffluenzaAr = FileManagement::csv_to_array($fileNameAffluenza,$log,';',false);
+$fileNameAffluenza = REMOTE_SITE_BOLZANO.'/'.'AFFLUENZA_WAHLBETEILIGUNG.CSV';
+$dataAffluenzaAr = FileManagement::csv_to_array($fileNameAffluenza,$log,"\t",false);
 
 if (!$dataAffluenzaAr) {
 	$log->logError('Impossibile proseguire. Impossibile recuperare il file'. $fileNameAffluenza);
@@ -136,11 +101,11 @@ for ($i=0;$i < count($dataAffluenzaTmpAr); $i++) {
 $dataAffluenzaTmpAr = $dataAffluenzaAr; 
 $dataAffluenzaAr = array();
 $cod_prov_tmp = null;
-$cod_com_tmp = $dataAffluenzaTmpAr[0]['COMUNEISTAT'];
+$cod_com_tmp = $dataAffluenzaTmpAr[0]['MUNI_NUM'];
 for ($i=0;$i < count($dataAffluenzaTmpAr); $i++) { 
-    if ($cod_com_tmp != null && $cod_com_tmp != $dataAffluenzaTmpAr[$i]['COMUNEISTAT']) {
+    if ($cod_com_tmp != null && $cod_com_tmp != $dataAffluenzaTmpAr[$i]['MUNI_NUM']) {
         $dataAffluenzaAr[] = $dataAffluenzaTmpAr[$i-1];
-        $cod_com_tmp = $dataAffluenzaTmpAr[$i]['COMUNEISTAT'];
+        $cod_com_tmp = $dataAffluenzaTmpAr[$i]['MUNI_NUM'];
     } elseif ($i == count($dataAffluenzaTmpAr)-1) {
         $dataAffluenzaAr[] = $dataAffluenzaTmpAr[$i];
 
@@ -153,7 +118,7 @@ for ($i=0;$i < count($dataAffluenzaTmpAr); $i++) {
  * si accede ai dati dell'affluenza del comune tramite indice Codice Istat 
  */
 foreach ($dataAffluenzaAr as $comuneAffluenza) {
-    $codComIstatString = $comuneAffluenza['COMUNEISTAT'];
+    $codComIstatString = $comuneAffluenza['MUNI_NUM'];
     for ($i=1; $i < 4; $i++) {
         if (strlen($codComIstatString) < 3) {
             $codComIstatString = '0'.$codComIstatString;
@@ -161,7 +126,8 @@ foreach ($dataAffluenzaAr as $comuneAffluenza) {
     }
 
     $comuneAffluenza['PROVISTAT'] = '021';
-    $CodIstatComune = $comuneAffluenza['PROVISTAT'] . $codComIstatString;
+//    $CodIstatComune = $comuneAffluenza['PROVISTAT'] . $codComIstatString;
+    $CodIstatComune =  $codComIstatString;
     $comuneAffluenza['cod_prov'] = $cod_prov;
     $comuneAffluenza['cod_com'] = substr($dataListaComuniHA[$CodIstatComune]['CODICE ELETTORALE'],-4);
     $comuneAffluenza['desc_prov'] = $desc_prov;
@@ -186,53 +152,58 @@ if (!$dataVotiListeAr) {
  * Lettura voti Liste
  * Lettura da remoto
  */
-$fileNameVotiListe = REMOTE_SITE_BOLZANO.'/'.'VOTILISTESINDACI-SUM.CSV'; 
+$fileNameVotiListe = REMOTE_SITE_BOLZANO.'/'.'VOTILISTA_LISTENSTIMMEN.CSV'; 
  
 //$fileNameVotiListe = REMOTE_SITE_BOLZANO.'/'.'VOTILISTE-SUM.CSV'; 
-$dataVotiListeAr = FileManagement::csv_to_array($fileNameVotiListe,$log,';',false);
+$dataVotiListeAr = FileManagement::csv_to_array($fileNameVotiListe,$log,"\t",false);
 if (!$dataVotiListeAr) {
 	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNameVotiListe);
 	die();
 }
 
-//var_dump($dataVotiListeAr);die();
 /**
  * trasformazione in array associativo VotiListe.
- * si accede ai dati dei voti delle liste tramite indice codice comune + ordine candidatura  
+ * si accede ai dati dei voti delle liste tramite indice codice comune + ordine lista  
  */
-$ordineCandidatura = '0';
 $ordineLista = '0';
 $comuneIstatTmp = '0';
 foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
-	if ($comuneIstatTmp <> $dataVotiSingolaLista['COMUNEISTAT']) {
-        $comuneIstatTmp = $dataVotiSingolaLista['COMUNEISTAT'];
-        $ordineCandidatura = '0';
+	if ($comuneIstatTmp <> $dataVotiSingolaLista['MUNI_NUM']) {
+        $comuneIstatTmp = $dataVotiSingolaLista['MUNI_NUM'];
         $ordineLista = 0;
     }
 
-    if ($dataVotiSingolaLista['ORDINECANDIDATURA'] != '') {
-        $dataVotiListeHA[$comuneIstatTmp][] = $dataVotiSingolaLista;
+    if ($dataVotiSingolaLista['LIST_NUM'] != '') {
+        $ordineLista = $dataVotiSingolaLista['LIST_NUM'];
+        $dataVotiListeHA[$comuneIstatTmp][$ordineLista] = $dataVotiSingolaLista;
     } 
 
-/*
-        if ($ordineCandidatura <> $dataVotiSingolaLista['ORDINECANDIDATURA']) {
-            $ordineCandidatura = $dataVotiSingolaLista['ORDINECANDIDATURA'];
-        } 
-*/
 }
-//var_dump($dataVotiListeHA);die();
+
+/**
+ * Lettura preferenze ai candidati collegati alle liste
+ */
+$fileNameVotiPreferenze = REMOTE_SITE_BOLZANO.'/'.'VOTILISTA_LISTENSTIMMEN.CSV'; 
+ 
+$dataVotiPreferenzeAr = FileManagement::csv_to_array($fileNameVotiListe,$log,"\t",false);
+if (!$dataVotiPreferenzeAr) {
+	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNameVotiListe);
+	die();
+}
+/**
+ * FINO QUI
+ */
 
 /**
  * Creazione oggetto x json
  * modello Ministero dell'Interno
- * scrutinio_comunali_1t.json
  */
 
 $comuneInCorso = '';
 $objectEnte = new enti();
 $tot_com = 0;
 /**
- * Cicla Voti Sindaco
+ * Cicla Voti Lista
  * crea nuovo oggetto per ogni comune
  * Imposta dati generali (parte in new scrutinio, parte in setCandidato. Alcuni dati generali sono nel file dei voti del sindaco)
  * Imposta Voti lista per ogni sindaco in setVotiListeCandidato
