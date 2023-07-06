@@ -63,6 +63,7 @@ if (!$dataListaCandidatureAr) {
  */
 //$file2write_part = CONV_DIR;
 $file2write_part = FILE_PATH_CONVERTITO;
+$file2write_provincia_part = FILE_PATH_PROVINCIA_CONVERTITO;
 
 
 
@@ -183,19 +184,41 @@ foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
 /**
  * Lettura preferenze ai candidati collegati alle liste
  */
-$fileNameVotiPreferenze = REMOTE_SITE_BOLZANO.'/'.'VOTILISTA_LISTENSTIMMEN.CSV'; 
+$fileNameVotiPreferenze = REMOTE_SITE_BOLZANO.'/'.'PREFERENZE_VORZUGSSTIMMEN.CSV'; 
  
-$dataVotiPreferenzeAr = FileManagement::csv_to_array($fileNameVotiListe,$log,"\t",false);
+$dataVotiPreferenzeAr = FileManagement::csv_to_array($fileNameVotiPreferenze,$log,"\t",false);
 if (!$dataVotiPreferenzeAr) {
 	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNameVotiListe);
 	die();
 }
-/**
- * FINO QUI
- */
 
 /**
- * Creazione oggetto x json
+ * trasformazione in array associativo VotiListe.
+ * si accede ai dati dei voti dei candidati  tramite indice codice comune + ordine lista  
+ */
+$ordineLista = '0';
+$ordineCand = 0;
+$comuneIstatTmp = '0';
+foreach ($dataVotiPreferenzeAr as $dataVotiPreferenzeSingolaAr) {
+	if ($comuneIstatTmp <> $dataVotiPreferenzeSingolaAr['MUNI_NUM']) {
+        $comuneIstatTmp = $dataVotiPreferenzeSingolaAr['MUNI_NUM'];
+        $ordineLista = $dataVotiPreferenzeSingolaAr['LIST_NUM'];
+        $ordineCand = 0;
+    }
+
+    if ($dataVotiPreferenzeSingolaAr['LIST_NUM'] != '' && $dataVotiPreferenzeSingolaAr['LIST_NUM'] == $ordineLista) {
+        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand] = $dataVotiPreferenzeSingolaAr;
+        $ordineCand++;
+    } else {
+        $ordineLista = $dataVotiPreferenzeSingolaAr['LIST_NUM'];
+        $ordineCand = 0;
+        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand] = $dataVotiPreferenzeSingolaAr;
+    } 
+
+}
+
+/**
+ * Creazione oggetto enti che vanno al voto x json
  * modello Ministero dell'Interno
  */
 
@@ -207,60 +230,79 @@ $tot_com = 0;
  * crea nuovo oggetto per ogni comune
  * Imposta dati generali (parte in new scrutinio, parte in setCandidato. Alcuni dati generali sono nel file dei voti del sindaco)
  * Imposta Voti lista per ogni sindaco in setVotiListeCandidato
+ * 
+ * NOTA: in setCandidato viene impostata la lista
+ *       in setVotiListeCandidato vengono impostati i risultati dei candidati  
  */
-foreach ($dataVotiSindacoAr as $singleDataVotiSindacoAr) {
+foreach ($dataVotiListeHA as $singoloComuneListe) {
 
-    $codComIstatString = $singleDataVotiSindacoAr['COMUNEISTAT'];
-    for ($i=1; $i < 4; $i++) {
-        if (strlen($codComIstatString) < 3) {
-            $codComIstatString = '0'.$codComIstatString;
-        } 
-    }
-    $CodIstatComune = PROV_ISTAT.$codComIstatString;
-	if ($singleDataVotiSindacoAr['COMUNEISTAT'] == $comuneInCorso && isset($objectComune)) { 
-		$objectComune->numeroCandidato = $objectComune->numeroCandidato + 1;
-		$objectComune->setCandidato($singleDataVotiSindacoAr);
-		// Aggiunge voti di lista per ogni candidato
-		$objectComune->setVotiListeCandidato($dataVotiListeHA);
-	} else {
-		if (isset($objectComune)) { //->jsonObject->desc_com)) {
-			// scrive file
-			$cod_com = $objectComune->jsonObject->int->cod_com;
-			$file2write = $file2write_part.$cod_com.'/response.json';
-//			$file2write = $file2write_part.$comuneInCorso.'response.json';
-			FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
+    foreach ($singoloComuneListe as $singolaLista) {
+        $codComIstatString = $singolaLista['MUNI_NUM'];
+        if (($singolaLista ['MUNI_NUM'] == $comuneInCorso) && isset($objectComune)) {
+            $objectComune->numeroCandidato = $objectComune->numeroCandidato + 1;
+            $objectComune->setCandidato($singolaLista);
+            $candidatiListaComuneAr = $dataVotiPreferenzeHA[$codComIstatString];
+            $objectComune->setVotiListeCandidato($candidatiListaComuneAr);
 
-			//Upload file to dl
-			if (MAKE_UPLOAD) {
-				FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
-			}
-            echo $tot_com . ': '.$objectComune->jsonObject->int->cod_com.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '<br>';
+            // Aggiorna provincia
+            $objectProvincia->numeroCandidatoProvincia = $objectProvincia->numeroCandidatoProvincia + 1;
+            $datiAffluenzaComuneInCorso = $dataAffluenzaHA[$comuneInCorso];
+            $objectProvincia->setCandidatoProvincia($singolaLista, $datiAffluenzaComuneInCorso);
+            $objectProvincia->setVotiListeCandidatoProvincia($candidatiListaComuneAr, $comuneInCorso); 
 
-            //Aggiunge comune a Ente
-            $objectEnte->setComune($objectComune->jsonObject);
 
-            // distrugge oggetto
-			unset($objectComune);
-		}
-        $comuneInCorso = $singleDataVotiSindacoAr['COMUNEISTAT']; // Codice ISTAT senza la parte di Provincia
+        } else {
+            if (isset($objectComune)) { //->jsonObject->desc_com)) {
+                // scrive file
+                $cod_com = $objectComune->jsonObject->int->cod_com;
+                $file2write = $file2write_part.$cod_com.'/response.json';
+    //			$file2write = $file2write_part.$comuneInCorso.'response.json';
+                FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
+    
+                //Upload file to dl
+                if (MAKE_UPLOAD) {
+                    FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
+                }
+                echo $tot_com . ': '.$objectComune->jsonObject->int->cod_com.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '<br>';
+    
+                //Aggiunge comune a Ente
+                $objectEnte->setComune($objectComune->jsonObject);
+    
+                // distrugge oggetto
+                unset($objectComune);
+                $objectProvincia->numeroCandidatoProvincia = 0;
+
+            }
+            $comuneInCorso = $singolaLista ['MUNI_NUM'];
          
-        /**
-         * crea oggetto Se esiste il dato dell'affluenza.
-         * Altrimenti assume che non si sia votato.
-         */  
-
-        if (array_key_exists($CodIstatComune, $dataAffluenzaHA)) {
-            $objectComune = new scrutinio($dataAffluenzaHA[$CodIstatComune]); 
+            /**
+             * crea oggetto del comune
+             */  
+    
+            $objectComune = new scrutinio($dataAffluenzaHA[$comuneInCorso]); 
             $tot_com++;
             // Aggiungi candidato
-            $objectComune->setCandidato($singleDataVotiSindacoAr);
-
+            $objectComune->setCandidato($singolaLista);
+    
             // Aggiunge voti di lista per ogni candidato
-            $objectComune->setVotiListeCandidato($dataVotiListeHA);
+            $candidatiListaComuneAr = $dataVotiPreferenzeHA[$codComIstatString];
+            $objectComune->setVotiListeCandidato($candidatiListaComuneAr);
+
+            // Aggiorna i dati della provincia
+            if (!isset($objectProvincia)) {
+                $objectProvincia = new scrutinioProvincia($dataAffluenzaHA[$comuneInCorso]);
+            } 
+            $objectProvincia->setCandidatoProvincia($singolaLista, $dataAffluenzaHA[$comuneInCorso]);
+            $objectProvincia->setVotiListeCandidatoProvincia($candidatiListaComuneAr, $comuneInCorso);
+    
         }
 
+
+    }
+
+
 	}
-}
+
 /* Scrive ultimo comune
 */
 if (isset($objectComune)) { //->jsonObject->desc_com)) {
@@ -284,6 +326,35 @@ if (isset($objectComune)) { //->jsonObject->desc_com)) {
 }
 
 /**
+ *  Scrive la provincia
+ */ 
+if (isset($objectProvincia)) {
+
+	// scrive file
+	$file2write = $file2write_provincia_part.'/response.json';
+//			$file2write = $file2write_part.$comuneInCorso.'response.json';
+	$cand = $objectProvincia->jsonObject->cand;
+
+//	Ordinamenti::OrdinaOggetti($cand);
+	// Ordina l'array di oggetti secondo la proprietà "voti"
+	usort($cand, 'confrontaVoti');
+
+//	var_dump($cand);die();
+	$objectProvincia->jsonObject->cand = $cand;
+
+	FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
+
+	//Upload file to dl
+	if (MAKE_UPLOAD) {
+		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+	}
+	echo $tot_com . ': '.$objectProvincia->jsonObject->int->cod_pro.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '\r<br>';
+
+	// distrugge oggetto
+	unset($objectProvincia);
+}
+
+/**
  * Scrive il file Enti
  */
 if (AGGIORNA_ENTI) {
@@ -296,5 +367,15 @@ if (AGGIORNA_ENTI) {
 	}
 	
 }
+
+// Funzione di confronto per l'ordinamento
+function confrontaVoti($a, $b) {
+    if ($a->voti == $b->voti) {
+        return 0;
+    }
+//    return ($a->voti < $b->voti) ? -1 : 1; // ascendente
+	return ($a->voti < $b->voti) ? 1 : -1; // discendente
+}
+
 
 echo "<h2>Conversione della provincia di Bolzano terminata con successo</h2>";
