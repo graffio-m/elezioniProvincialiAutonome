@@ -98,20 +98,52 @@ for ($i=0;$i < count($dataAffluenzaTmpAr); $i++) {
 
 /**
  * Depura l'array. Prende solo l'ultima rilevazione per ogni comune.
+ * Viene calcolata l'affluenza totale
  */
+$affluenzaTotaleHA = array();
+$affluenzaTotaleHA['ele_m'] = 0;
+$affluenzaTotaleHA['ele_f'] = 0;;
+$affluenzaTotaleHA['ele_t'] = 0;
+$affluenzaTotaleHA['vot_m'] = 0;
+$affluenzaTotaleHA['vot_f'] = 0;
+$affluenzaTotaleHA['vot_t'] = 0;
+
+$affluenzaTotale = 0;
+$affluenzaTotale_m = 0;
+$affluenzaTotale_f = 0;
+/*
 $dataAffluenzaTmpAr = $dataAffluenzaAr; 
 $dataAffluenzaAr = array();
 $cod_prov_tmp = null;
 $cod_com_tmp = $dataAffluenzaTmpAr[0]['MUNI_NUM'];
-for ($i=0;$i < count($dataAffluenzaTmpAr); $i++) { 
+ for ($i=0;$i < count($dataAffluenzaTmpAr); $i++) { 
     if ($cod_com_tmp != null && $cod_com_tmp != $dataAffluenzaTmpAr[$i]['MUNI_NUM']) {
         $dataAffluenzaAr[] = $dataAffluenzaTmpAr[$i-1];
         $cod_com_tmp = $dataAffluenzaTmpAr[$i]['MUNI_NUM'];
+        $affluenzaTotale += $dataAffluenzaTmpAr[$i]['MUNI_VOTERS_T'];
     } elseif ($i == count($dataAffluenzaTmpAr)-1) {
         $dataAffluenzaAr[] = $dataAffluenzaTmpAr[$i];
+        $affluenzaTotale += $dataAffluenzaTmpAr[$i]['MUNI_VOTERS_T'];
 
     } 
 }
+
+ */
+foreach ($dataAffluenzaAr as $dataAffluenzaRilevazioneSingola) {
+    if ($dataAffluenzaRilevazioneSingola['MUNI_HH'] == '21') {
+        $dataAffluenzaAr[] = $dataAffluenzaRilevazioneSingola;
+        $affluenzaTotaleHA['ele_m'] = 0;
+        $affluenzaTotaleHA['ele_f'] = 0;;
+        $affluenzaTotaleHA['ele_t'] += $dataAffluenzaRilevazioneSingola['MUNI_RIGHT_T'];
+        $affluenzaTotaleHA['vot_m'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_M'];
+        $affluenzaTotaleHA['vot_f'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_F'];
+        $affluenzaTotaleHA['vot_t'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_T'];
+        $affluenzaTotaleHA['vot_f'] += $dataAffluenzaRilevazioneSingola['MUNI_SEC'];
+        $affluenzaTotaleHA['sz_tot'] += $dataAffluenzaRilevazioneSingola['MUNI_SECT'];
+        $affluenzaTotaleHA['perv'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
+        $affluenzaTotaleHA['sz_pres'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
+    }
+}    
 
 
 /**
@@ -130,11 +162,12 @@ foreach ($dataAffluenzaAr as $comuneAffluenza) {
 //    $CodIstatComune = $comuneAffluenza['PROVISTAT'] . $codComIstatString;
     $CodIstatComune =  $codComIstatString;
     $comuneAffluenza['cod_prov'] = $cod_prov;
-    $comuneAffluenza['cod_com'] = substr($dataListaComuniHA[$CodIstatComune]['CODICE ELETTORALE'],-4);
+    $comuneAffluenza['cod_com'] = substr($dataListaComuniHA[$CodIstatComune]['CODICE ELETTORALE'],-4);  
     $comuneAffluenza['desc_prov'] = $desc_prov;
     $comuneAffluenza['cod_ISTAT'] = $CodIstatComune;
 //    $comuneAffluenza['cod_comune_originale'] = $comuneAffluenza['COMUNEISTAT'];
     $dataAffluenzaHA[$CodIstatComune] = $comuneAffluenza;
+//    $affluenzaTotale += $comuneAffluenza['MUNI_VOTERS_T'];
 
 }
 
@@ -193,7 +226,7 @@ if (!$dataVotiPreferenzeAr) {
 }
 
 /**
- * trasformazione in array associativo VotiListe.
+ * trasformazione in array associativo VotiPreferenze.
  * si accede ai dati dei voti dei candidati  tramite indice codice comune + ordine lista  
  */
 $ordineLista = '0';
@@ -290,7 +323,7 @@ foreach ($dataVotiListeHA as $singoloComuneListe) {
 
             // Aggiorna i dati della provincia
             if (!isset($objectProvincia)) {
-                $objectProvincia = new scrutinioProvincia($dataAffluenzaHA[$comuneInCorso]);
+                $objectProvincia = new scrutinioProvincia($dataAffluenzaHA[$comuneInCorso],$affluenzaTotaleHA);
             } 
             $objectProvincia->setCandidatoProvincia($singolaLista, $dataAffluenzaHA[$comuneInCorso]);
             $objectProvincia->setVotiListeCandidatoProvincia($candidatiListaComuneAr, $comuneInCorso);
