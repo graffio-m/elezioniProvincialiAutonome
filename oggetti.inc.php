@@ -490,7 +490,7 @@ class enti {
     public $numeroCandidatoProvincia = 0;
     public $numeroListaProvincia = 0;
 
-    public function __construct($dataAffluenzaProvinciaHA) {
+    public function __construct($dataAffluenzaProvinciaHA, $affluenzaTotaleHA = array()) {
 
         $this->jsonObject = new stdClass();
         $this->jsonObject->int = new stdClass();
@@ -542,18 +542,21 @@ class enti {
                  // Inizializzazione totali
                 $this->jsonObject->int->desc_reg = $dataAffluenzaProvinciaHA['desc_prov'];
                 $this->jsonObject->int->cod_prov = COD_PROV; 
-                $this->jsonObject->int->sz_tot = 0;
-                $this->jsonObject->int->perv = 0;
-                $this->jsonObject->int->sz_p_cons = 0;
+                $this->jsonObject->int->sz_tot = $affluenzaTotaleHA['sz_tot'];
+                $this->jsonObject->int->sz_cons = $affluenzaTotaleHA['perv'];
+                $this->jsonObject->int->sz_pres = $affluenzaTotaleHA['sz_pres'];
                 $this->jsonObject->int->sk_bianche = 0;
                 $this->jsonObject->int->sk_nulle = 0;
-                $this->jsonObject->int->ele_m = 0;
-                $this->jsonObject->int->ele_f = 0;
-                $this->jsonObject->int->ele_t = 0;
-                $this->jsonObject->int->vot_m = 0;
-                $this->jsonObject->int->vot_f = 0;
-                $this->jsonObject->int->vot_t = 0;
-                $this->jsonObject->int->perc_vot = 0;
+                $this->jsonObject->int->ele_m = $affluenzaTotaleHA['ele_m'];
+                $this->jsonObject->int->ele_f = $affluenzaTotaleHA['ele_f'];
+                $this->jsonObject->int->ele_t = $affluenzaTotaleHA['ele_t'];
+                $this->jsonObject->int->vot_m = $affluenzaTotaleHA['vot_m'];
+                $this->jsonObject->int->vot_f = $affluenzaTotaleHA['vot_f'];
+                $this->jsonObject->int->vot_t = $affluenzaTotaleHA['vot_t'];
+
+                $percVoti = round((($this->jsonObject->int->vot_t/$this->jsonObject->int->ele_t)*100),2);
+                $this->jsonObject->int->perc_vot = $percVoti;
+                
 
                 $this->jsonObject->int->dt_agg = date("YmdHis");
             break;
@@ -774,24 +777,24 @@ class enti {
      * Aggiorna totali della provincia con i dati del file affluenza del comune  
      * 
      */    
-        $this->jsonObject->int->sz_tot += $datiAffluenzaComuneInCorso['MUNI_SECT'];
-        $this->jsonObject->int->perv += $datiAffluenzaComuneInCorso['MUNI_SECP'];
-        $this->jsonObject->int->sz_p_cons += $datiAffluenzaComuneInCorso['MUNI_SECP'];
-        $this->jsonObject->int->ele_m = 0;
-        $this->jsonObject->int->ele_f = 0;
-        $this->jsonObject->int->ele_t += $datiAffluenzaComuneInCorso['MUNI_RIGHT_T'];
-        $this->jsonObject->int->vot_m += $datiAffluenzaComuneInCorso['MUNI_VOTERS_M'];
-        $this->jsonObject->int->vot_f += $datiAffluenzaComuneInCorso['MUNI_VOTERS_F'];
-        $this->jsonObject->int->vot_t += $datiAffluenzaComuneInCorso['MUNI_VOTERS_T'];
-        $this->jsonObject->int->perc_vot = 0;
+        // $this->jsonObject->int->sz_tot += $datiAffluenzaComuneInCorso['MUNI_SECT'];
+        // $this->jsonObject->int->perv += $datiAffluenzaComuneInCorso['MUNI_SECP'];
+        // $this->jsonObject->int->sz_p_cons += $datiAffluenzaComuneInCorso['MUNI_SECP'];
+        // $this->jsonObject->int->ele_m = 0;
+        // $this->jsonObject->int->ele_f = 0;
+        // $this->jsonObject->int->ele_t += $datiAffluenzaComuneInCorso['MUNI_RIGHT_T'];
+//        $this->jsonObject->int->vot_m += $datiAffluenzaComuneInCorso['MUNI_VOTERS_M'];
+//        $this->jsonObject->int->vot_f += $datiAffluenzaComuneInCorso['MUNI_VOTERS_F'];
+//        $this->jsonObject->int->vot_t += $datiAffluenzaComuneInCorso['MUNI_VOTERS_T'];
+//        $this->jsonObject->int->perc_vot = 0;
 
         if (!property_exists($this->jsonObject->cand[$this->numeroCandidatoProvincia], 'pos')) {
             $this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti = $candidatoAr['LIST_VOTES']; 
+            $this->jsonObject->int->sk_bianche += (int)$candidatoAr['MUNI_BLANK']; 
+            $this->jsonObject->int->sk_nulle += (int)$candidatoAr['MUNI_NULLS']; 
         } else {
             $this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti += $candidatoAr['LIST_VOTES']; 
         }
-        $this->jsonObject->int->sk_bianche = (int)$candidatoAr['MUNI_BLANK']; 
-        $this->jsonObject->int->sk_nulle = (int)$candidatoAr['MUNI_NULLS']; 
         if ($candidatoAr['MUNI_NULLS'] == "021120") {
             $percVoti = 0;
         }
