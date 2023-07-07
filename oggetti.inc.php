@@ -52,13 +52,19 @@ class scrutinio {
                 $this->jsonObject->int->cod_ISTAT = $dataAffluenzaAR['cod_ISTAT'];
                 $this->jsonObject->int->cod_comune_originale = $dataAffluenzaAR['NUMI_NUM'];
 
-                $this->jsonObject->int->ele_m = $dataAffluenzaAR['ELETTORIMASCHI'];
-                $this->jsonObject->int->ele_f = $dataAffluenzaAR['ELETTORIFEMMINE'];
+                $this->jsonObject->int->ele_m = 0;
+                $this->jsonObject->int->ele_f = 0;;
                 $this->jsonObject->int->ele_t = $dataAffluenzaAR['MUNI_RIGHT_T'];
  
                 $this->jsonObject->int->vot_m = $dataAffluenzaAR['MUNI_VOTERS_M'];
                 $this->jsonObject->int->vot_f = $dataAffluenzaAR['MUNI_VOTERS_F'];
                 $this->jsonObject->int->vot_t = $dataAffluenzaAR['MUNI_VOTERS_T'];
+
+                $this->jsonObject->int->sz_tot = $dataAffluenzaAR['MUNI_SECT'];
+                $this->jsonObject->int->sz_pres = $dataAffluenzaAR['MUNI_SECP'];
+                $this->jsonObject->int->sz_perv = $dataAffluenzaAR['MUNI_SECP'];
+                $this->jsonObject->int->sk_bianche = 0;
+                $this->jsonObject->int->sk_nulle = 0;
 
                 $percVoti = 0;
                 if ($this->jsonObject->int->ele_t > 0 && $this->jsonObject->int->vot_t > 0) {
@@ -291,13 +297,13 @@ class scrutinio {
          *  dati generali
          *  sono ripetuti nel record di ogni candidato Presidente
          */
+        $this->jsonObject->int->sk_bianche = $candidatoAr['MUNI_SECP'];
+        $this->jsonObject->int->sk_nulle = $candidatoAr['MUNI_NULLS'];
 
         if (!isset($this->jsonObject->int->sz_tot)) {
             $this->jsonObject->int->sz_tot = $candidatoAr['MUNI_SECT'];
             $this->jsonObject->int->sz_p_sind = $candidatoAr['MUNI_SECT'];
             $this->jsonObject->int->sz_p_cons = $candidatoAr['NUMSEZPERVENUTE'];
-            $this->jsonObject->int->sk_bianche = $candidatoAr['MUNI_SECP'];
-            $this->jsonObject->int->sk_nulle = $candidatoAr['MUNI_NULLS'];
             $this->jsonObject->int->sk_contestate = 0;
 
             $this->jsonObject->int->fine_rip = '';
@@ -543,8 +549,8 @@ class enti {
                 $this->jsonObject->int->desc_reg = $dataAffluenzaProvinciaHA['desc_prov'];
                 $this->jsonObject->int->cod_prov = COD_PROV; 
                 $this->jsonObject->int->sz_tot = $affluenzaTotaleHA['sz_tot'];
-                $this->jsonObject->int->sz_cons = $affluenzaTotaleHA['perv'];
-                $this->jsonObject->int->sz_pres = $affluenzaTotaleHA['sz_pres'];
+                $this->jsonObject->int->sz_pres = $affluenzaTotaleHA['sz_perv'];
+                $this->jsonObject->int->sz_perv = $affluenzaTotaleHA['sz_perv'];
                 $this->jsonObject->int->sk_bianche = 0;
                 $this->jsonObject->int->sk_nulle = 0;
                 $this->jsonObject->int->ele_m = $affluenzaTotaleHA['ele_m'];
