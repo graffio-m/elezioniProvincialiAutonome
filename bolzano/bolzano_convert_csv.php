@@ -140,7 +140,7 @@ foreach ($dataAffluenzaAr as $dataAffluenzaRilevazioneSingola) {
         $affluenzaTotaleHA['vot_t'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_T'];
         $affluenzaTotaleHA['vot_f'] += $dataAffluenzaRilevazioneSingola['MUNI_SEC'];
         $affluenzaTotaleHA['sz_tot'] += $dataAffluenzaRilevazioneSingola['MUNI_SECT'];
-        $affluenzaTotaleHA['perv'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
+        $affluenzaTotaleHA['sz_perv'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
         $affluenzaTotaleHA['sz_pres'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
     }
 }    
@@ -288,6 +288,16 @@ foreach ($dataVotiListeHA as $singoloComuneListe) {
             if (isset($objectComune)) { //->jsonObject->desc_com)) {
                 // scrive file
                 $cod_com = $objectComune->jsonObject->int->cod_com;
+
+                $cand = $objectComune->jsonObject->cand;
+
+                //	Ordinamenti::OrdinaOggetti($cand);
+                // Ordina l'array di oggetti secondo la proprietà "voti"
+                usort($cand, 'confrontaVoti');
+                
+                $objectComune->jsonObject->cand = $cand;
+                                
+
                 $file2write = $file2write_part.$cod_com.'/response.json';
     //			$file2write = $file2write_part.$comuneInCorso.'response.json';
                 FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
@@ -341,6 +351,12 @@ foreach ($dataVotiListeHA as $singoloComuneListe) {
 if (isset($objectComune)) { //->jsonObject->desc_com)) {
     // scrive file
     $cod_com = $objectComune->jsonObject->int->cod_com;
+
+    $cand = $objectComune->jsonObject->cand;
+    // Ordina l'array di oggetti secondo la proprietà "voti"
+    usort($cand, 'confrontaVoti');
+    $objectComune->jsonObject->cand = $cand;
+    
     $file2write = $file2write_part.$cod_com.'/response.json';
 //			$file2write = $file2write_part.$comuneInCorso.'response.json';
     FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
