@@ -164,6 +164,8 @@ foreach ($dataAffluenzaAr as $comuneAffluenza) {
     $comuneAffluenza['cod_prov'] = $cod_prov;
     $comuneAffluenza['cod_com'] = substr($dataListaComuniHA[$CodIstatComune]['CODICE ELETTORALE'],-4);  
     $comuneAffluenza['desc_prov'] = $desc_prov;
+    $comuneAffluenza['desc_prov_DE'] = DESC_PROV_DE;
+    $comuneAffluenza['desc_prov_LAD'] = DESC_PROV_LAD;    
     $comuneAffluenza['cod_ISTAT'] = $CodIstatComune;
 //    $comuneAffluenza['cod_comune_originale'] = $comuneAffluenza['COMUNEISTAT'];
     $dataAffluenzaHA[$CodIstatComune] = $comuneAffluenza;
@@ -289,14 +291,12 @@ foreach ($dataVotiListeHA as $singoloComuneListe) {
                 // scrive file
                 $cod_com = $objectComune->jsonObject->int->cod_com;
 
+            // Ordina l'array di oggetti secondo la proprietà "voti"
                 $cand = $objectComune->jsonObject->cand;
-
-                //	Ordinamenti::OrdinaOggetti($cand);
-                // Ordina l'array di oggetti secondo la proprietà "voti"
                 usort($cand, 'confrontaVoti');
-                
                 $objectComune->jsonObject->cand = $cand;
                                 
+                $objectComune->OrdinaListe(); 
 
                 $file2write = $file2write_part.$cod_com.'/response.json';
     //			$file2write = $file2write_part.$comuneInCorso.'response.json';
@@ -356,6 +356,8 @@ if (isset($objectComune)) { //->jsonObject->desc_com)) {
     // Ordina l'array di oggetti secondo la proprietà "voti"
     usort($cand, 'confrontaVoti');
     $objectComune->jsonObject->cand = $cand;
+
+    $objectComune->OrdinaListe(); 
     
     $file2write = $file2write_part.$cod_com.'/response.json';
 //			$file2write = $file2write_part.$comuneInCorso.'response.json';
@@ -382,16 +384,15 @@ if (isset($objectProvincia)) {
 	// scrive file
 	$file2write = $file2write_provincia_part.'/response.json';
 //			$file2write = $file2write_part.$comuneInCorso.'response.json';
+
+// Ordina l'array di oggetti secondo la proprietà "voti"
 	$cand = $objectProvincia->jsonObject->cand;
-
-//	Ordinamenti::OrdinaOggetti($cand);
-	// Ordina l'array di oggetti secondo la proprietà "voti"
 	usort($cand, 'confrontaVoti');
-
-//	var_dump($cand);die();
 	$objectProvincia->jsonObject->cand = $cand;
 
-	FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
+    $objectProvincia->OrdinaListe();
+
+    FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
 
 	//Upload file to dl
 	if (MAKE_UPLOAD) {
