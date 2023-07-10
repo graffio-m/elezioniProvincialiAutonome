@@ -51,7 +51,7 @@ define ('DATA_ELEZIONI', 30200920); // versione test
  * Costanti per l'upload su dl
  */
 define('MAKE_UPLOAD',FALSE);
-define('AGGIORNA_ENTI',FALSE);
+define('AGGIORNA_ENTI',TRUE);
 
  define('UPLOAD_URL','http://10.99.36.78:40525');
 
@@ -86,9 +86,11 @@ define('REMOTE_SITE_BOLZANO', 'https://civis.bz.it/vote/landtag2018/results/elec
  * Costanti Bolzano
  */
 
-  define('DESC_PROV','BOLZANO');
-  define('COD_PROV','014');
-  define('REG_STO',4);
+define('DESC_PROV','BOLZANO');
+define('DESC_PROV_DE','BOZEN');
+define('DESC_PROV_LAD','BULSAN');
+define('COD_PROV','014');
+define('REG_STO',4);
 define('PROV_ISTAT','021');
 define('DIR_LOG','../Logger/logs');
 

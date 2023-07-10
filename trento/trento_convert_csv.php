@@ -234,6 +234,9 @@ foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 			usort($cand, 'confrontaVoti');
 			$objectComune->jsonObject->cand = $cand; 
 
+			$objectComune->OrdinaListe(); // nel caso di trento ordina i candidati di ogni lista per il numero di voti
+
+
 			// scrive file
 			$cod_com = $objectComune->jsonObject->int->cod_com;
 			$file2write = $file2write_part.$cod_com.'/response.json';
@@ -286,8 +289,10 @@ if (isset($objectComune)) { //->jsonObject->desc_com)) {
 	//ordina per voti
 	$cand = $objectComune->jsonObject->cand; 
 	usort($cand, 'confrontaVoti');
-//	var_dump($cand);die();
 	$objectComune->jsonObject->cand = $cand; 
+
+	$objectComune->OrdinaListe();
+
 
 	// scrive file
 	$cod_com = $objectComune->jsonObject->int->cod_com;
@@ -318,15 +323,14 @@ if (isset($objectProvincia)) {
 	// scrive file
 	$file2write = $file2write_provincia_part.'/response.json';
 //			$file2write = $file2write_part.$comuneInCorso.'response.json';
+
+// Ordina l'array di oggetti secondo la proprietà "voti"
 	$cand = $objectProvincia->jsonObject->cand;
-
-//	Ordinamenti::OrdinaOggetti($cand);
-	// Ordina l'array di oggetti secondo la proprietà "voti"
 	usort($cand, 'confrontaVoti');
-
-//	var_dump($cand);die();
 	$objectProvincia->jsonObject->cand = $cand;
 
+    $objectProvincia->OrdinaListe();
+	
 	FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
 
 	//Upload file to dl
