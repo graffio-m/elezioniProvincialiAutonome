@@ -304,6 +304,7 @@ class scrutinio {
             $this->jsonObject->int->sz_tot = $candidatoAr['MUNI_SECT'];
             $this->jsonObject->int->sz_p_sind = $candidatoAr['MUNI_SECT'];
             $this->jsonObject->int->sz_p_cons = $candidatoAr['NUMSEZPERVENUTE'];
+            $this->jsonObject->int->sz_perv = $candidatoAr['NUMSEZPERVENUTE'];
             $this->jsonObject->int->sk_contestate = 0;
 
             $this->jsonObject->int->fine_rip = '';
@@ -368,6 +369,7 @@ class scrutinio {
             $this->jsonObject->int->sz_tot = $candidatoAr['Sez.Totali'];
             $this->jsonObject->int->sz_p_sind = $candidatoAr['Sez.Pervenute'];
             $this->jsonObject->int->sz_p_cons = $candidatoAr['Sez.Pervenute'];
+            $this->jsonObject->int->sz_perv = $candidatoAr['Sez.Pervenute'];
             $this->jsonObject->int->sk_bianche = $candidatoAr['Schede Bianche'];
             $this->jsonObject->int->sk_nulle = $candidatoAr['Schede nulle o contenenti solo voti nulli'];
             $this->jsonObject->int->sk_contestate = $candidatoAr['Schede contestate e non attribuite'];
@@ -564,7 +566,7 @@ class enti {
 
                 // Inizializzazione totali
                 $this->jsonObject->int->sz_tot = 0;
-                $this->jsonObject->int->perv = 0;
+                $this->jsonObject->int->sz_perv = 0;
                 $this->jsonObject->int->sz_p_cons = 0;
                 $this->jsonObject->int->sk_bianche = 0;
                 $this->jsonObject->int->sk_nulle = 0;
