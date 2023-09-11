@@ -185,6 +185,24 @@ if (!$dataVotiListeAr) {
  */
 
 /**
+ * Lettura Liste e loghi
+ * Lettura da locale
+ */
+$fileNameLoghiListe = './dati_scaricati/'.'partiti_foto.csv'; 
+$listaLoghiAr = array(); 
+$dataNameLoghiListeAr = FileManagement::csv_to_array($fileNameLoghiListe,$log,";",false);
+if (!$dataNameLoghiListeAr) {
+	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNameVotiListe);
+	die();
+}
+/**
+ * 
+foreach ($dataNameLoghiListeAr as $singolaListaLogo) {
+    $listaLoghiAr[] = $singolaListaLogo;
+} 
+ */
+ 
+/**
  * Lettura voti Liste
  * Lettura da remoto
  */
@@ -204,6 +222,7 @@ if (!$dataVotiListeAr) {
 $ordineLista = '0';
 $comuneIstatTmp = '0';
 foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
+    $dataVotiSingolaLista['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
 	if ($comuneIstatTmp <> $dataVotiSingolaLista['MUNI_NUM']) {
         $comuneIstatTmp = $dataVotiSingolaLista['MUNI_NUM'];
         $ordineLista = 0;
@@ -235,6 +254,7 @@ $ordineLista = '0';
 $ordineCand = 0;
 $comuneIstatTmp = '0';
 foreach ($dataVotiPreferenzeAr as $dataVotiPreferenzeSingolaAr) {
+    $dataVotiPreferenzeSingolaAr['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
 	if ($comuneIstatTmp <> $dataVotiPreferenzeSingolaAr['MUNI_NUM']) {
         $comuneIstatTmp = $dataVotiPreferenzeSingolaAr['MUNI_NUM'];
         $ordineLista = $dataVotiPreferenzeSingolaAr['LIST_NUM'];
@@ -243,9 +263,11 @@ foreach ($dataVotiPreferenzeAr as $dataVotiPreferenzeSingolaAr) {
 
     if ($dataVotiPreferenzeSingolaAr['LIST_NUM'] != '' && $dataVotiPreferenzeSingolaAr['LIST_NUM'] == $ordineLista) {
         $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand] = $dataVotiPreferenzeSingolaAr;
+        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand]['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
         $ordineCand++;
     } else {
         $ordineLista = $dataVotiPreferenzeSingolaAr['LIST_NUM'];
+        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand]['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
         $ordineCand = 0;
         $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand] = $dataVotiPreferenzeSingolaAr;
     } 
