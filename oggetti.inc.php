@@ -273,6 +273,8 @@ class scrutinio {
         $this->jsonObject->cand[$this->numeroCandidato]->pos = $candidatoAr['LIST_NUM']; 
         $this->jsonObject->cand[$this->numeroCandidato]->voti = $candidatoAr['LIST_VOTES']; 
         $this->jsonObject->cand[$this->numeroCandidato]->id_Presidente = $candidatoAr['ORDINECANDIDATURA']; 
+        $this->jsonObject->cand[$this->numeroCandidato]->img_lis_r = $candidatoAr['img_lis_r'];
+
 
         $percVoti = 0;
         $votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['MUNI_BLANK'] + $candidatoAr['MUNI_NULLS']);
@@ -842,6 +844,8 @@ class enti {
         $this->jsonObject->cand[$this->numeroCandidatoProvincia]->sg_ass = 0; 
         $this->jsonObject->cand[$this->numeroCandidatoProvincia]->sort_coal = null; 
         $this->jsonObject->cand[$this->numeroCandidatoProvincia]->sg_sort_coal = null; 
+        $this->jsonObject->cand[$this->numeroCandidatoProvincia]->img_lis_r = $candidatoAr['img_lis_r'];
+
 
         /** Duplicato di voti e perc
          */
