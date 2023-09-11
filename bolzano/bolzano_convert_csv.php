@@ -283,6 +283,7 @@ $comuneInCorso = '';
 $objectEnte = new enti();
 $tot_com = 0;
 /**
+ * 
  * Cicla Voti Lista
  * crea nuovo oggetto per ogni comune
  * Imposta dati generali (parte in new scrutinio, parte in setCandidato. Alcuni dati generali sono nel file dei voti del sindaco)
