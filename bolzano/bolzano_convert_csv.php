@@ -185,6 +185,26 @@ if (!$dataVotiListeAr) {
  */
 
 /**
+ * Lettura candidati e immagini
+ * Lettura da locale
+ */
+$fileNamePicCandidati = './dati_scaricati/'.'candidati_foto.csv'; 
+$dataPicCandidatiAr = array(); 
+$dataPicCandidatiAr = FileManagement::csv_to_array($fileNamePicCandidati,$log,";",false);
+if (!$dataPicCandidatiAr) {
+	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNamePicCandidati);
+	die();
+}
+$dataPicCandListaAr = array();
+$numListaTmp = 0;
+foreach ($dataPicCandidatiAr as $singolCandPic) {
+    if ($singolCandPic['LIST_NUM'] > $numListaTmp +1) {
+        $numListaTmp++;
+    }
+    $dataPicCandListaAr[$numListaTmp][] = $singolCandPic;
+} 
+
+/**
  * Lettura Liste e loghi
  * Lettura da locale
  */
@@ -192,16 +212,11 @@ $fileNameLoghiListe = './dati_scaricati/'.'partiti_foto.csv';
 $listaLoghiAr = array(); 
 $dataNameLoghiListeAr = FileManagement::csv_to_array($fileNameLoghiListe,$log,";",false);
 if (!$dataNameLoghiListeAr) {
-	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNameVotiListe);
+	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNameLoghiListe);
 	die();
 }
-/**
- * 
-foreach ($dataNameLoghiListeAr as $singolaListaLogo) {
-    $listaLoghiAr[] = $singolaListaLogo;
-} 
- */
  
+
 /**
  * Lettura voti Liste
  * Lettura da remoto
@@ -254,20 +269,20 @@ $ordineLista = '0';
 $ordineCand = 0;
 $comuneIstatTmp = '0';
 foreach ($dataVotiPreferenzeAr as $dataVotiPreferenzeSingolaAr) {
-    $dataVotiPreferenzeSingolaAr['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
 	if ($comuneIstatTmp <> $dataVotiPreferenzeSingolaAr['MUNI_NUM']) {
         $comuneIstatTmp = $dataVotiPreferenzeSingolaAr['MUNI_NUM'];
         $ordineLista = $dataVotiPreferenzeSingolaAr['LIST_NUM'];
         $ordineCand = 0;
     }
+    $dataVotiPreferenzeSingolaAr['img_lis_c'] = $dataPicCandListaAr[$ordineLista-1][$ordineCand]['CAND_PICTURE'];
 
     if ($dataVotiPreferenzeSingolaAr['LIST_NUM'] != '' && $dataVotiPreferenzeSingolaAr['LIST_NUM'] == $ordineLista) {
         $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand] = $dataVotiPreferenzeSingolaAr;
-        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand]['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
+//        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand]['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
         $ordineCand++;
     } else {
         $ordineLista = $dataVotiPreferenzeSingolaAr['LIST_NUM'];
-        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand]['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
+//        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand]['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
         $ordineCand = 0;
         $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand] = $dataVotiPreferenzeSingolaAr;
     } 

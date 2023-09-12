@@ -240,6 +240,8 @@ class scrutinio {
                     $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->desc_lis_c = $singoloCand['CAND_NAME']; 
                     $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->voti = $singoloCand['CAND_VOTES']; 
                     $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->pos = $singoloCand['LIST_NUM']; 
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->img_lis_c = $singoloCand['img_lis_c']; 
+                    
                     
                     $percVotiLista = 0;
                     if ($singoloCand['CAND_VOTES'] > 0 && $this->jsonObject->int->vot_t > 0) {
