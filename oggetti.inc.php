@@ -51,7 +51,8 @@ class scrutinio {
                 $this->jsonObject->int->desc_com_DE = strtoupper($nomeComune_DE);
                 $this->jsonObject->int->desc_com_LAD = strtoupper($nomeComune_LAD);
 
-                $this->jsonObject->int->cod_com = $dataAffluenzaAR['MUNI_NUM'];;
+//                $this->jsonObject->int->cod_com = $dataAffluenzaAR['MUNI_NUM'];
+                $this->jsonObject->int->cod_com = $dataAffluenzaAR['cod_com'];
                 $this->jsonObject->int->desc_prov = $dataAffluenzaAR['desc_prov'];
                 $this->jsonObject->int->desc_prov_DE = DESC_PROV_DE;
                 $this->jsonObject->int->desc_prov_LAD = DESC_PROV_LAD;                
