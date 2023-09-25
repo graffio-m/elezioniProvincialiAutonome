@@ -336,14 +336,50 @@ foreach ($dataVotiListeHA as $singoloComuneListe) {
                                 
                 $objectComune->OrdinaListe(); 
 
+            /**
+             *  Scrittura file italiano
+             */    
                 $file2write = $file2write_part.$cod_com.'/response.json';
     //			$file2write = $file2write_part.$comuneInCorso.'response.json';
                 FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
-    
+
                 //Upload file to dl
                 if (MAKE_UPLOAD) {
                     FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
                 }
+
+            /**
+             *  Scrittura file tedesco (suffisso de)
+             */    
+                $objectComune->jsonObject->int->desc_prov_it = $objectComune->jsonObject->int->desc_prov;
+                $objectComune->jsonObject->int->desc_prov = $objectComune->jsonObject->int->desc_prov_DE;
+                $objectComune->jsonObject->int->desc_com_it = $objectComune->jsonObject->int->desc_com;
+                $objectComune->jsonObject->int->desc_com = $objectComune->jsonObject->int->desc_com_DE;                
+                $file2write = $file2write_part.$cod_com.'/response_de.json';
+    //			$file2write = $file2write_part.$comuneInCorso.'response.json';
+                FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
+
+                //Upload file to dl
+                if (MAKE_UPLOAD) {
+                    FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
+                }
+
+            /**
+             *  Scrittura file ladino (suffisso la)
+             */    
+                $objectComune->jsonObject->int->desc_prov_it = $objectComune->jsonObject->int->desc_prov;
+                $objectComune->jsonObject->int->desc_prov = $objectComune->jsonObject->int->desc_prov_LAD;
+                $objectComune->jsonObject->int->desc_com_it = $objectComune->jsonObject->int->desc_com;
+                $objectComune->jsonObject->int->desc_com = $objectComune->jsonObject->int->desc_com_LAD;                
+                $file2write = $file2write_part.$cod_com.'/response_la.json';
+    //			$file2write = $file2write_part.$comuneInCorso.'response.json';
+                FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
+
+                //Upload file to dl
+                if (MAKE_UPLOAD) {
+                    FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
+                }
+                
                 echo $tot_com . ': '.$objectComune->jsonObject->int->cod_com.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '<br>';
     
                 //Aggiunge comune a Ente
@@ -405,6 +441,39 @@ if (isset($objectComune)) { //->jsonObject->desc_com)) {
     if (MAKE_UPLOAD) {
         FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
     }
+
+    /**
+     *  Scrittura file tedesco (suffisso de)
+     */    
+        $objectComune->jsonObject->int->desc_prov_it = $objectComune->jsonObject->int->desc_prov;
+        $objectComune->jsonObject->int->desc_prov = $objectComune->jsonObject->int->desc_prov_DE;
+        $objectComune->jsonObject->int->desc_com_it = $objectComune->jsonObject->int->desc_com;
+        $objectComune->jsonObject->int->desc_com = $objectComune->jsonObject->int->desc_com_DE;                
+        $file2write = $file2write_part.$cod_com.'/response_de.json';
+//			$file2write = $file2write_part.$comuneInCorso.'response.json';
+        FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
+
+        //Upload file to dl
+        if (MAKE_UPLOAD) {
+            FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
+        }
+
+    /**
+     *  Scrittura file ladino (suffisso la)
+     */    
+        $objectComune->jsonObject->int->desc_prov_it = $objectComune->jsonObject->int->desc_prov;
+        $objectComune->jsonObject->int->desc_prov = $objectComune->jsonObject->int->desc_prov_LAD;
+        $objectComune->jsonObject->int->desc_com_it = $objectComune->jsonObject->int->desc_com;
+        $objectComune->jsonObject->int->desc_com = $objectComune->jsonObject->int->desc_com_LAD;                
+        $file2write = $file2write_part.$cod_com.'/response_la.json';
+//			$file2write = $file2write_part.$comuneInCorso.'response.json';
+        FileManagement::save_object_to_json($objectComune->jsonObject,$file2write,$log); 
+
+        //Upload file to dl
+        if (MAKE_UPLOAD) {
+            FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
+        }
+
     echo $tot_com . ': '.$objectComune->jsonObject->int->cod_com.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '<br>';
 
     //Aggiunge comune a Ente
@@ -421,9 +490,8 @@ if (isset($objectProvincia)) {
 
 	// scrive file
 	$file2write = $file2write_provincia_part.'/response.json';
-//			$file2write = $file2write_part.$comuneInCorso.'response.json';
 
-// Ordina l'array di oggetti secondo la proprietà "voti"
+    // Ordina l'array di oggetti secondo la proprietà "voti"
 	$cand = $objectProvincia->jsonObject->cand;
 	usort($cand, 'confrontaVoti');
 	$objectProvincia->jsonObject->cand = $cand;
@@ -436,7 +504,38 @@ if (isset($objectProvincia)) {
 	if (MAKE_UPLOAD) {
 		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
 	}
-	echo $tot_com . ': '.$objectProvincia->jsonObject->int->cod_pro.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '\r<br>';
+
+	/**
+     *  scrive file tedesco (suffisso de)
+     * */ 
+	$file2write = $file2write_provincia_part.'/response_de.json';
+
+    $objectProvincia->jsonObject->int->desc_reg_it = $objectProvincia->jsonObject->int->desc_reg;
+    $objectProvincia->jsonObject->int->desc_reg = $objectProvincia->jsonObject->int->desc_reg_DE;
+
+    FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
+
+	//Upload file to dl
+	if (MAKE_UPLOAD) {
+		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+	}
+
+	/**
+     *  scrive file ladino (suffisso la)
+     * */ 
+	$file2write = $file2write_provincia_part.'/response_la.json';
+
+    $objectProvincia->jsonObject->int->desc_reg_it = $objectProvincia->jsonObject->int->desc_reg;
+    $objectProvincia->jsonObject->int->desc_reg = $objectProvincia->jsonObject->int->desc_reg_LAD;
+
+    FileManagement::save_object_to_json($objectProvincia->jsonObject,$file2write,$log); 
+
+	//Upload file to dl
+	if (MAKE_UPLOAD) {
+		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+	}
+
+    echo $tot_com . ': '.$objectProvincia->jsonObject->int->cod_pro.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '\r<br>';
 
 	// distrugge oggetto
 	unset($objectProvincia);
