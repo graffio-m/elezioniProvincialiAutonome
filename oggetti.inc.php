@@ -240,7 +240,7 @@ class scrutinio {
                     }
                     $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->desc_lis_c = $singoloCand['CAND_NAME']; 
                     $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->voti = $singoloCand['CAND_VOTES']; 
-                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->pos = $singoloCand['LIST_NUM']; 
+                    $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->pos = $singoloCand['CAND_NUM']; 
                     $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->img_lis_c = $singoloCand['img_lis_c']; 
                     
                     
@@ -762,7 +762,8 @@ class enti {
                         $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->voti += $singoloCand['CAND_VOTES']; 
                     }
                     $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->desc_lis_c = $singoloCand['CAND_NAME']; 
-                    $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->pos = $singoloCand['LIST_NUM']; 
+                    $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->pos = $singoloCand['CAND_NUM']; 
+                    $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->img_lis_c = $singoloCand['img_lis_c']; 
                     
                     $percVotiLista = 0;
                     $voti = $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->voti;

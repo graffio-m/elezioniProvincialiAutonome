@@ -72,15 +72,15 @@ $file2write_provincia_part = FILE_PATH_PROVINCIA_CONVERTITO;
  * lettura da filesystem
 */
 //$fileNameAffluenza = DOWN_DIR.'/'.'AFFLUENZE-SUM.CSV';
-$fileNameAffluenza = REMOTE_SITE_BOLZANO.'/'.'AFFLUENZA_WAHLBETEILIGUNG.CSV';
-$dataAffluenzaAr = FileManagement::csv_to_array($fileNameAffluenza,$log,"\t",false);
+$fileNameAffluenza = REMOTE_SITE_BOLZANO.'AFFLUENZA_WAHLBETEILIGUNG.CSV';
+//$dataAffluenzaAr = FileManagement::csv_to_array($fileNameAffluenza,$log,"\t",false);
+$dataAffluenzaAr = FileManagement::csv_to_array($fileNameAffluenza,$log,";",false);
 
 if (!$dataAffluenzaAr) {
 	$log->logError('Impossibile proseguire. Impossibile recuperare il file'. $fileNameAffluenza);
 	//Logger::error("Impossibile proseguire. Impossibile recuperare il file", $specificaLog);
 	die();
 }
-//var_dump($dataAffluenzaAr);die();
 
 
 /**
@@ -151,6 +151,7 @@ foreach ($dataAffluenzaAr as $dataAffluenzaRilevazioneSingola) {
  * si accede ai dati dell'affluenza del comune tramite indice Codice Istat 
  */
 foreach ($dataAffluenzaAr as $comuneAffluenza) {
+    echo $comuneAffluenza['MUNI_NUM']. ' - '.$comuneAffluenza['MUNI_DESC_I'].' - '.$comuneAffluenza['MUNI_SECP'];
     $codComIstatString = $comuneAffluenza['MUNI_NUM'];
     for ($i=1; $i < 4; $i++) {
         if (strlen($codComIstatString) < 3) {
@@ -221,10 +222,11 @@ if (!$dataNameLoghiListeAr) {
  * Lettura voti Liste
  * Lettura da remoto
  */
-$fileNameVotiListe = REMOTE_SITE_BOLZANO.'/'.'VOTILISTA_LISTENSTIMMEN.CSV'; 
+$fileNameVotiListe = REMOTE_SITE_BOLZANO.'VOTILISTA_LISTENSTIMMEN.CSV'; 
  
 //$fileNameVotiListe = REMOTE_SITE_BOLZANO.'/'.'VOTILISTE-SUM.CSV'; 
-$dataVotiListeAr = FileManagement::csv_to_array($fileNameVotiListe,$log,"\t",false);
+//$dataVotiListeAr = FileManagement::csv_to_array($fileNameVotiListe,$log,"\t",false);
+$dataVotiListeAr = FileManagement::csv_to_array($fileNameVotiListe,$log,";",false);
 if (!$dataVotiListeAr) {
 	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNameVotiListe);
 	die();
@@ -235,9 +237,9 @@ if (!$dataVotiListeAr) {
  * si accede ai dati dei voti delle liste tramite indice codice comune + ordine lista  
  */
 $ordineLista = '0';
-$comuneIstatTmp = '0';
+$comuneIstatTmp = 0;
 foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
-    $dataVotiSingolaLista['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
+    $muni_num = trim($dataVotiSingolaLista["MUNI_NUM"]);
 	if ($comuneIstatTmp <> $dataVotiSingolaLista['MUNI_NUM']) {
         $comuneIstatTmp = $dataVotiSingolaLista['MUNI_NUM'];
         $ordineLista = 0;
@@ -245,6 +247,7 @@ foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
 
     if ($dataVotiSingolaLista['LIST_NUM'] != '') {
         $ordineLista = $dataVotiSingolaLista['LIST_NUM'];
+        $dataVotiSingolaLista['img_lis_r'] = iconv('UTF-8', 'UTF-8//IGNORE',$dataNameLoghiListeAr[$ordineLista-1]['LIST_PICTURE']);
         $dataVotiListeHA[$comuneIstatTmp][$ordineLista] = $dataVotiSingolaLista;
     } 
 
@@ -253,9 +256,9 @@ foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
 /**
  * Lettura preferenze ai candidati collegati alle liste
  */
-$fileNameVotiPreferenze = REMOTE_SITE_BOLZANO.'/'.'PREFERENZE_VORZUGSSTIMMEN.CSV'; 
- 
-$dataVotiPreferenzeAr = FileManagement::csv_to_array($fileNameVotiPreferenze,$log,"\t",false);
+$fileNameVotiPreferenze = REMOTE_SITE_BOLZANO.'PREFERENZE_VORZUGSSTIMMEN.CSV'; 
+//$dataVotiPreferenzeAr = FileManagement::csv_to_array($fileNameVotiPreferenze,$log,"\t",false);
+$dataVotiPreferenzeAr = FileManagement::csv_to_array($fileNameVotiPreferenze,$log,";",false);
 if (!$dataVotiPreferenzeAr) {
 	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNameVotiListe);
 	die();
@@ -263,29 +266,34 @@ if (!$dataVotiPreferenzeAr) {
 
 /**
  * trasformazione in array associativo VotiPreferenze.
- * si accede ai dati dei voti dei candidati  tramite indice codice comune + ordine lista  
+ * si accede ai dati dei voti dei candidati tramite indice codice comune + ordine lista  
  */
 $ordineLista = '0';
 $ordineCand = 0;
-$comuneIstatTmp = '0';
+$comuneIstatTmp = null;
 foreach ($dataVotiPreferenzeAr as $dataVotiPreferenzeSingolaAr) {
+//    echo 'preferenze comune: '.$dataVotiPreferenzeSingolaAr['MUNI_NUM'] .' - '.$comuneIstatTmp.' - '.$dataVotiPreferenzeSingolaAr['LIST_NUM'].PHP_EOL;
+
 	if ($comuneIstatTmp <> $dataVotiPreferenzeSingolaAr['MUNI_NUM']) {
         $comuneIstatTmp = $dataVotiPreferenzeSingolaAr['MUNI_NUM'];
         $ordineLista = $dataVotiPreferenzeSingolaAr['LIST_NUM'];
-        $ordineCand = 0;
+        $ordineCand = -1;
     }
-    $dataVotiPreferenzeSingolaAr['img_lis_c'] = $dataPicCandListaAr[$ordineLista-1][$ordineCand]['CAND_PICTURE'];
+
 
     if ($dataVotiPreferenzeSingolaAr['LIST_NUM'] != '' && $dataVotiPreferenzeSingolaAr['LIST_NUM'] == $ordineLista) {
+        $ordineCand++;
+        $dataVotiPreferenzeSingolaAr['img_lis_c'] = iconv('UTF-8', 'UTF-8//IGNORE', $dataPicCandListaAr[$ordineLista-1][$ordineCand]['CAND_PICTURE']);
         $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand] = $dataVotiPreferenzeSingolaAr;
 //        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand]['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
-        $ordineCand++;
     } else {
         $ordineLista = $dataVotiPreferenzeSingolaAr['LIST_NUM'];
 //        $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand]['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
         $ordineCand = 0;
+        $dataVotiPreferenzeSingolaAr['img_lis_c'] = iconv('UTF-8', 'UTF-8//IGNORE', $dataPicCandListaAr[$ordineLista-1][$ordineCand]['CAND_PICTURE']);
         $dataVotiPreferenzeHA[$comuneIstatTmp][$ordineLista][$ordineCand] = $dataVotiPreferenzeSingolaAr;
     } 
+//    echo 'preferenze comune: '.(int)$comuneIstatTmp.PHP_EOL;
 
 }
 
@@ -380,7 +388,7 @@ foreach ($dataVotiListeHA as $singoloComuneListe) {
                     FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, $cod_prov, $cod_com, $log);	
                 }
                 
-                echo $tot_com . ': '.$objectComune->jsonObject->int->cod_com.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '<br>';
+                echo $tot_com . ': '.$objectComune->jsonObject->int->cod_com.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . PHP_EOL;
     
                 //Aggiunge comune a Ente
                 $objectEnte->setComune($objectComune->jsonObject);
@@ -535,7 +543,7 @@ if (isset($objectProvincia)) {
 		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
 	}
 
-    echo $tot_com . ': '.$objectProvincia->jsonObject->int->cod_pro.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '\r<br>';
+    echo $tot_com . ': '.$objectProvincia->jsonObject->int->cod_pro.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . PHP_EOL;
 
 	// distrugge oggetto
 	unset($objectProvincia);
@@ -565,4 +573,4 @@ function confrontaVoti($a, $b) {
 }
 
 
-echo "<h2>Conversione della provincia di Bolzano terminata con successo</h2>";
+echo "<h2>Conversione della provincia di Bolzano terminata con successo</h2>".PHP_EOL;

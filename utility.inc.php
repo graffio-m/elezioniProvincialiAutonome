@@ -24,8 +24,25 @@ class FileManagement {
 
         if (($handle = fopen($filename, 'r')) !== FALSE)
         {
+/*
+            $bom_check = fread($handle, 3);
+
+             // Verifica se il file ha il BOM all'inizio
+            if ($bom_check === "\xEF\xBB\xBF") {
+                // Se il BOM è presente, leggi il file senza includerlo
+                fread($handle, 3);
+            } else {
+                // Se il BOM non è presente, riporta il puntatore del file all'inizio
+                fseek($handle, 0);
+            }
+            // fine verifica
+ */            
             while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE)
             {
+                if (substr($row[0], 0, 3) === "\xEF\xBB\xBF") {
+                    $row[0] = substr($row[0], 3);
+                }
+                
                 if(!$header)
                     $header = $row;
                 else

@@ -55,14 +55,15 @@ define('AGGIORNA_ENTI',TRUE);
 
  define('UPLOAD_URL','http://10.99.36.78:40525');
 
- //define('DL_PATH','dl/rainews/elezioni2020/PX/scrutiniG/DE/20200920/TE/08'); // versione in produzione
-define('DL_PATH','/dl/rainews/elezioni2020/PX/scrutiniG/DE/30200920/TE/08'); //versione di test
+ //define('DL_PATH','dl/rainews/elezioni2020/PX/scrutiniR/DE/20231022/TE/08'); // versione in produzione
+define('DL_PATH','/dl/rainews/elezioni2020/PX/scrutiniR/DE/30200920/TE/08'); //versione di test
 
 define('UPLOAD_ACTION','/action/push');
 define('POST_NAME','response.json');
 
-//define('DL_PATH_ENTI','dl/rainews/elezioni2020/PX/getentiG/DE/20200920/TE/08/'); // versione in produzione
-define('DL_PATH_ENTI','/dl/rainews/elezioni2020/PX/getentiG/DE/30200920/TE/08'); //versione di test
+//define('DL_PATH_ENTI','dl/rainews/elezioni2023/PX/getentiR/DE/20231022/TE/08/'); // versione in produzione
+define('DL_PATH_ENTI','/dl/rainews/elezioni2023/PX/getentiR/DE/20231022000/TE/08'); //versione di test
+
 
 /**
  * Struttura del path in cui scrivere i json dei dati
@@ -79,8 +80,11 @@ define('FILE_PATH_PROVINCIA_CONVERTITO',CONV_DIR.PATH_PROV.PATH_PROV_BOLZANO);
  /**
   *  Remote site Bolzano
   */
-//  define('REMOTE_SITE_BOLZANO', 'https://press.elezionicomunali.bz.it/'); // versione in produzione
-define('REMOTE_SITE_BOLZANO', 'https://civis.bz.it/vote/landtag2018/results/elections/'); // versione test
+    
+define('REMOTE_SITE_BOLZANO', 'https://press-landtagswahlen.provinz.bz.it/files/'); // versione in produzione
+//define('REMOTE_SITE_BOLZANO', 'https://press-landtagswahlen.provinz.bz.it/demo/'); // versione test
+//define('REMOTE_SITE_BOLZANO', 'https://civis.bz.it/vote/landtag2018/results/elections/'); // versione test old
+
 
 /**
  * Costanti Bolzano

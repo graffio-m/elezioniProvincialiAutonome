@@ -81,7 +81,10 @@ define('FILE_PATH_PROVINCIA_CONVERTITO',CONV_DIR.PATH_PROV.PATH_PROV_TRENTO);
   *  Remote site Trento
   */
   define('REMOTE_SITE_TRENTO', 'http://media.elezioni-2018.provincia.tn.it/');
-  
+//  define('REMOTE_SITE_TRENTO', 'http://media.elezioni-2023.provincia.tn.it/');
+
+
+
 /**
  * Costanti Trento
  */

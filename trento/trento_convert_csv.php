@@ -86,6 +86,27 @@ if (!$dataVotiPresidenteAr) {
 }
 
 /**
+ * Lettura candidati e immagini
+ * Lettura da locale
+ */
+$fileNamePicCandidati = './dati_scaricati/'.'candidati_foto.csv'; 
+$dataPicCandidatiAr = array(); 
+$dataPicCandidatiAr = FileManagement::csv_to_array($fileNamePicCandidati,$log,";",false);
+if (!$dataPicCandidatiAr) {
+	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNamePicCandidati);
+	die();
+}
+$dataPicCandListaAr = array();
+$numCandTmp = 0;
+foreach ($dataPicCandidatiAr as $singolCandPic) {
+    if ($singolCandPic['Progressivo Presidente'] > $numCandTmp +1) {
+        $numCandTmp++;
+    }
+    $dataPicCandListaAr[$numCandTmp][] = $singolCandPic;
+} 
+
+
+/**
  * lettura Affluenza.
  * lettura da filesystem
  * Essendo iniziato lo scrutinio si può prendere l'ultimo aggiornamento dell'affluenza
@@ -214,6 +235,10 @@ $tot_com = 0;
 foreach ($dataVotiPresidenteAr as $singleDataVotiPresidenteAr) {
 	if ($singleDataVotiPresidenteAr['Istat Comune'] == $comuneInCorso) { 
 		$objectComune->numeroCandidato = $objectComune->numeroCandidato + 1;
+/** 
+		$singleDataVotiPresidenteAr[]
+		$dataVotiSingolaLista['img_lis_r'] = $dataNameLoghiListeAr[$ordineLista]['LIST_PICTURE'];
+*/
 		$objectComune->setCandidato($singleDataVotiPresidenteAr);
 		// Aggiunge voti di lista per ogni candidato
 		$objectComune->setVotiListeCandidato($dataVotiListeAr, $comuneInCorso); 
