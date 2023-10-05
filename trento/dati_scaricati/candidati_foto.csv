@@ -1,8 +1,8 @@
-Progressivo Presidente	Presidente Id	Cognome_nome	immagine
-1	1141	FUGATTI MAURIZIO	Fugatti_Maurizio.png
-2	1142	MARINI ALEX 	Marini_Alex.png
-3	1143	VALDUGA FRANCESCO 	Valduga_Francesco.png
-4	1144	DEGASPERI FILIPPO 	Degasperi_Filippo.png
-5	1145	DIVINA SERGIO 	Diviina_Sergio.png
-6	1146	DARDO ELENA 	Dardo_Elena.png
-7	1147	RIZZO MARCO	Rizzo_Marco.png
+"Progressivo Presidente";"Presidente Id";"Cognome_nome";"immagine"
+1;1141;"FUGATTI MAURIZIO";"Fugatti_Maurizio.png"
+2;1142;"MARINI ALEX ";"Marini_Alex.png"
+3;1143;"VALDUGA FRANCESCO ";"Valduga_Francesco.png"
+4;1144;"DEGASPERI FILIPPO ";"Degasperi_Filippo.png"
+5;1145;"DIVINA SERGIO ";"Diviina_Sergio.png"
+6;1146;"DARDO ELENA ";"Dardo_Elena.png"
+7;1147;"RIZZO MARCO";"Rizzo_Marco.png"

@@ -251,3 +251,7 @@ Logger/logs/*
 trento/dati_scaricati/img/loghi_liste/*
 trento/dati_scaricati/img/Candidati_Presidente/*
 bolzano/dati_scaricati/old/*
+bolzano/dati_convertiti/PR/014.tar.gz
+bolzano/dati_scaricati/da_peter/partiti_foto_solo.csv
+bolzano/dati_scaricati/partiti_foto_solo.csv
+bolzano/candidati_foto_da_ls.txt

@@ -97,12 +97,12 @@ if (!$dataPicCandidatiAr) {
 	die();
 }
 $dataPicCandListaAr = array();
-$numCandTmp = 0;
+$numCandTmp = 1;
 foreach ($dataPicCandidatiAr as $singolCandPic) {
-    if ($singolCandPic['Progressivo Presidente'] > $numCandTmp +1) {
+    if ($singolCandPic['Progressivo Presidente'] > $numCandTmp) {
         $numCandTmp++;
     }
-    $dataPicCandListaAr[$numCandTmp][] = $singolCandPic;
+    $dataPicCandListaAr[$numCandTmp]['img_lis_c'] = $singolCandPic['immagine'];
 } 
 
 
