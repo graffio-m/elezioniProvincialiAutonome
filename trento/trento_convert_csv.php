@@ -64,6 +64,28 @@ $cod_prov = COD_PROV;
 $file2write_part = FILE_PATH_CONVERTITO;
 $file2write_provincia_part = FILE_PATH_PROVINCIA_CONVERTITO;
 
+
+/**
+ * Lettura immagini dei candidati
+ * Lettura da locale
+ */
+$fileNamePicCandidati = './dati_scaricati/'.'candidati_foto.csv'; 
+$dataPicCandidatiAr = array(); 
+$dataPicCandidatiAr = FileManagement::csv_to_array($fileNamePicCandidati,$log,";",false);
+if (!$dataPicCandidatiAr) {
+	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNamePicCandidati);
+	die();
+}
+$dataPicCandListaAr = array();
+$numCandTmp = 1;
+foreach ($dataPicCandidatiAr as $singolCandPic) {
+    if ($singolCandPic['Progressivo Presidente'] > $numCandTmp) {
+        $numCandTmp++;
+    }
+    $dataPicCandListaAr[$numCandTmp]['img_lis_c'] = $singolCandPic['immagine'];
+} 
+
+
 /**
  * Lettura voti Presidente da file locale
 
@@ -85,25 +107,12 @@ if (!$dataVotiPresidenteAr) {
 	die();
 }
 
-/**
- * Lettura candidati e immagini
- * Lettura da locale
- */
-$fileNamePicCandidati = './dati_scaricati/'.'candidati_foto.csv'; 
-$dataPicCandidatiAr = array(); 
-$dataPicCandidatiAr = FileManagement::csv_to_array($fileNamePicCandidati,$log,";",false);
-if (!$dataPicCandidatiAr) {
-	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNamePicCandidati);
-	die();
+$length = count($dataVotiPresidenteAr);
+
+for ($i = 0; $i < $length; $i++) {
+	$prog_pres = $dataVotiPresidenteAr[$i]['Progressivo Presidente'];
+	$dataVotiPresidenteAr[$i]['img_lis_c'] = $dataPicCandListaAr[$prog_pres]['img_lis_c'];
 }
-$dataPicCandListaAr = array();
-$numCandTmp = 1;
-foreach ($dataPicCandidatiAr as $singolCandPic) {
-    if ($singolCandPic['Progressivo Presidente'] > $numCandTmp) {
-        $numCandTmp++;
-    }
-    $dataPicCandListaAr[$numCandTmp]['img_lis_c'] = $singolCandPic['immagine'];
-} 
 
 
 /**
