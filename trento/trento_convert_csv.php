@@ -196,6 +196,28 @@ if (!$dataVotiListeAr) {
  */
 
 /**
+ * Lettura immagini dei partiti
+ * Lettura da locale
+ */
+$fileNamePicPartiti = './dati_scaricati/'.'partiti_foto.csv'; 
+$dataPicPartitiAr = array(); 
+$dataPicPartitiAr = FileManagement::csv_to_array($fileNamePicPartiti,$log,";",false);
+if (!$dataPicPartitiAr) {
+	$log->logFatal('Impossibile proseguire. Impossibile recuperare il file'. $fileNamePicPartiti);
+	die();
+}
+$dataPicPartitiListaAr = array();
+$numListTmp = 1;
+foreach ($dataPicPartitiAr as $singolPartitoPic) {
+/*     
+	if ($singolPartitoPic['Progressivo Lista'] > $numListTmp) {
+        $numListTmp++;
+    }
+ */ 
+   $dataPicPartitiListaAr[$singolPartitoPic['Progressivo Lista']]['img_lis_c'] = $singolPartitoPic['immagine'];
+}  
+
+/**
  * Lettura voti Liste
  * Lettura da remoto
  */
@@ -214,11 +236,15 @@ if (!$dataVotiListeAr) {
  * si accede ai dati dei voti delle liste tramite indice ID Presidente 
  */
 $PresidenteId = 0;
+$numArray = 0;
 foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
+	$dataVotiSingolaLista['img_lis_c'] = $dataPicPartitiListaAr[$dataVotiSingolaLista['Progressivo Lista']]['img_lis_c'];
+	$dataVotiListeAr[$numArray]['img_lis_c'] = $dataPicPartitiListaAr[$dataVotiSingolaLista['Progressivo Lista']]['img_lis_c'];
 	if ($PresidenteId <> $dataVotiSingolaLista['Presidente Id'] ) {
 		$PresidenteId = $dataVotiSingolaLista['Presidente Id'];
 	}
 	$dataVotiListeHA[$PresidenteId][] = $dataVotiSingolaLista;
+	$numArray++;
 }
 
 ksort($dataVotiListeHA);
