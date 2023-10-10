@@ -499,7 +499,11 @@ class enti {
     public function setComune($objectComune) {
             if (!array_key_exists($this->numeroEnte,$this->jsonObject->enti)) {
                 $this->jsonObject->enti[$this->numeroEnte] = new stdClass();
-                $this->jsonObject->enti[$this->numeroEnte]->desc = $objectComune->int->desc_com;
+                if (isset($objectComune->int->desc_com_it)) {
+                    $this->jsonObject->enti[$this->numeroEnte]->desc = $objectComune->int->desc_com_it;
+                } else {
+                    $this->jsonObject->enti[$this->numeroEnte]->desc = $objectComune->int->desc_com;
+                }
                 $this->jsonObject->enti[$this->numeroEnte]->cod = '04'.$objectComune->int->cod_prov.$objectComune->int->cod_com;
                 $this->jsonObject->enti[$this->numeroEnte]->tipo = 'CM';
                 $this->jsonObject->enti[$this->numeroEnte]->dt_agg = date("YmdHis");
