@@ -377,7 +377,7 @@ foreach ($dataVotiListeHA as $singoloComuneListe) {
              */    
                 $objectComune->jsonObject->int->desc_prov_it = $objectComune->jsonObject->int->desc_prov;
                 $objectComune->jsonObject->int->desc_prov = $objectComune->jsonObject->int->desc_prov_LAD;
-                $objectComune->jsonObject->int->desc_com_it = $objectComune->jsonObject->int->desc_com;
+//                $objectComune->jsonObject->int->desc_com_it = $objectComune->jsonObject->int->desc_com;
                 $objectComune->jsonObject->int->desc_com = $objectComune->jsonObject->int->desc_com_LAD;                
                 $file2write = $file2write_part.$cod_com.'/response_la.json';
     //			$file2write = $file2write_part.$comuneInCorso.'response.json';
@@ -510,7 +510,8 @@ if (isset($objectProvincia)) {
 
 	//Upload file to dl
 	if (MAKE_UPLOAD) {
-		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+		//FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+		FileManagement::upload_generic_to_dl($file2write, $log, $upload_path=DL_PATH_PROVINCIA, $url=UPLOAD_URL);	
 	}
 
 	/**
@@ -525,7 +526,8 @@ if (isset($objectProvincia)) {
 
 	//Upload file to dl
 	if (MAKE_UPLOAD) {
-		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+//		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+		FileManagement::upload_generic_to_dl($file2write, $log, $upload_path=DL_PATH_PROVINCIA, $url=UPLOAD_URL);	
 	}
 
 	/**
@@ -540,7 +542,8 @@ if (isset($objectProvincia)) {
 
 	//Upload file to dl
 	if (MAKE_UPLOAD) {
-		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+//		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+		FileManagement::upload_generic_to_dl($file2write, $log, $upload_path=DL_PATH_PROVINCIA, $url=UPLOAD_URL);	
 	}
 
     echo $tot_com . ': '.$objectProvincia->jsonObject->int->cod_pro.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . PHP_EOL;

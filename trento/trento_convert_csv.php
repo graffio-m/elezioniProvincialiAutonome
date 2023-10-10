@@ -395,7 +395,8 @@ if (isset($objectProvincia)) {
 
 	//Upload file to dl
 	if (MAKE_UPLOAD) {
-		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+//		FileManagement::upload_to_dl($file2write, $url=UPLOAD_URL, REG_STO, $cod_com, $log);	
+		FileManagement::upload_generic_to_dl($file2write, $log, $upload_path=DL_PATH_PROVINCIA, $url=UPLOAD_URL);	
 	}
 	echo $tot_com . ': '.$objectProvincia->jsonObject->int->cod_pro.' - '. $cod_com. ' - '. $CodIstatComune . ' - '. $objectComune->jsonObject->int->desc_com . '<br>';
 
@@ -409,7 +410,7 @@ if (isset($objectProvincia)) {
 if (AGGIORNA_ENTI) {
 	$file2write = FILE_PATH_CONVERTITO.'responseTrento.json';
 	FileManagement::save_object_to_json($objectEnte->jsonObject,$file2write,$log); 
-	
+
 	//Upload file to dl
 	if (MAKE_UPLOAD) {
 		FileManagement::upload_generic_to_dl($file2write, $log, $upload_path=DL_PATH_ENTI, $url=UPLOAD_URL);

@@ -58,6 +58,10 @@ define('AGGIORNA_ENTI',TRUE);
  //define('DL_PATH','dl/rainews/elezioni2020/PX/scrutiniR/DE/20231022/TE/08'); // versione in produzione
 define('DL_PATH','/dl/rainews/elezioni2020/PX/scrutiniR/DE/30200920/TE/08'); //versione di test
 
+ //define('DL_PATH_PROVINCIA','dl/rainews/elezioni2023/PX/scrutiniR/DE/50231020/TE/07/RE/04/PR/014/'); // versione in produzione
+ define('DL_PATH_PROVINCIA','dl/rainews/elezioni2023/PX/scrutiniR/DE/50231020/TE/07/RE/04/PR/014/'); //versione di test
+
+
 define('UPLOAD_ACTION','/action/push');
 define('POST_NAME','response.json');
 
