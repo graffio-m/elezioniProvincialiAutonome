@@ -501,6 +501,9 @@ class enti {
                 $this->jsonObject->enti[$this->numeroEnte] = new stdClass();
                 if (isset($objectComune->int->desc_com_it)) {
                     $this->jsonObject->enti[$this->numeroEnte]->desc = $objectComune->int->desc_com_it;
+                    $this->jsonObject->enti[$this->numeroEnte]->desc_it = $objectComune->int->desc_com_it;
+                    $this->jsonObject->enti[$this->numeroEnte]->desc_DE = $objectComune->int->desc_com_DE;
+                    $this->jsonObject->enti[$this->numeroEnte]->desc_LAD = $objectComune->int->desc_com_LAD;
                 } else {
                     $this->jsonObject->enti[$this->numeroEnte]->desc = $objectComune->int->desc_com;
                 }
