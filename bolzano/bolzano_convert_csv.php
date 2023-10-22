@@ -238,19 +238,46 @@ if (!$dataVotiListeAr) {
  */
 $ordineLista = '0';
 $comuneIstatTmp = 0;
+$votiValidiAr = array();
+$votiValidi = 0;
+$votiValidiProv = 0;
 foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
     $muni_num = trim($dataVotiSingolaLista["MUNI_NUM"]);
 	if ($comuneIstatTmp <> $dataVotiSingolaLista['MUNI_NUM']) {
+        $votiValidiAr[$comuneIstatTmp] = $votiValidi;
+        $votiValidiProv = $votiValidiProv + $votiValidi;
         $comuneIstatTmp = $dataVotiSingolaLista['MUNI_NUM'];
+        $dataVotiSingolaLista['voti_validi'] = 0;
+        $votiValidi = 0;
         $ordineLista = 0;
+//        $votiValidiAr[$comuneIstatTmp][$ordineLista] = 0;
     }
 
     if ($dataVotiSingolaLista['LIST_NUM'] != '') {
         $ordineLista = $dataVotiSingolaLista['LIST_NUM'];
+        if ($dataVotiSingolaLista['LIST_VOTES'] > 0) {
+            $votiValidi = $votiValidi + $dataVotiSingolaLista['LIST_VOTES']; 
+        }
         $dataVotiSingolaLista['img_lis_r'] = iconv('UTF-8', 'UTF-8//IGNORE',$dataNameLoghiListeAr[$ordineLista-1]['LIST_PICTURE']);
         $dataVotiListeHA[$comuneIstatTmp][$ordineLista] = $dataVotiSingolaLista;
     } 
-
+}
+    // cicla di nuovo per scrivere numero voti validi
+    foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
+        $muni_num = trim($dataVotiSingolaLista["MUNI_NUM"]);
+        if ($comuneIstatTmp <> $dataVotiSingolaLista['MUNI_NUM']) {
+            $comuneIstatTmp = $dataVotiSingolaLista['MUNI_NUM'];
+            $ordineLista = 0;
+        }
+    
+        if ($dataVotiSingolaLista['LIST_NUM'] != '') {
+            $ordineLista = $dataVotiSingolaLista['LIST_NUM'];
+            $dataVotiSingolaLista['voti_validi'] = $votiValidiAr[$comuneIstatTmp];
+            $dataVotiSingolaLista['voti_validi_prov'] = $votiValidiProv;
+            $dataVotiSingolaLista['img_lis_r'] = iconv('UTF-8', 'UTF-8//IGNORE',$dataNameLoghiListeAr[$ordineLista-1]['LIST_PICTURE']);
+            $dataVotiListeHA[$comuneIstatTmp][$ordineLista] = $dataVotiSingolaLista;
+        } 
+    
 }
 
 /**
