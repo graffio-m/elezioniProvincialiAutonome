@@ -131,17 +131,20 @@ $cod_com_tmp = $dataAffluenzaTmpAr[0]['MUNI_NUM'];
  */
 foreach ($dataAffluenzaAr as $dataAffluenzaRilevazioneSingola) {
     if ($dataAffluenzaRilevazioneSingola['MUNI_HH'] == '21') {
-        $dataAffluenzaAr[] = $dataAffluenzaRilevazioneSingola;
-        $affluenzaTotaleHA['ele_m'] = 0;
-        $affluenzaTotaleHA['ele_f'] = 0;;
-        $affluenzaTotaleHA['ele_t'] += $dataAffluenzaRilevazioneSingola['MUNI_RIGHT_T'];
-        $affluenzaTotaleHA['vot_m'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_M'];
-        $affluenzaTotaleHA['vot_f'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_F'];
-        $affluenzaTotaleHA['vot_t'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_T'];
-        $affluenzaTotaleHA['vot_f'] += $dataAffluenzaRilevazioneSingola['MUNI_SEC'];
-        $affluenzaTotaleHA['sz_tot'] += $dataAffluenzaRilevazioneSingola['MUNI_SECT'];
-        $affluenzaTotaleHA['sz_perv'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
-        $affluenzaTotaleHA['sz_pres'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
+        if ($dataAffluenzaRilevazioneSingola['MUNI_NUM'] <> '21120') {
+            $dataAffluenzaAr[] = $dataAffluenzaRilevazioneSingola;
+            $affluenzaTotaleHA['ele_m'] = 0;
+            $affluenzaTotaleHA['ele_f'] = 0;;
+            $affluenzaTotaleHA['ele_t'] += $dataAffluenzaRilevazioneSingola['MUNI_RIGHT_T'];
+            $affluenzaTotaleHA['vot_m'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_M'];
+            $affluenzaTotaleHA['vot_f'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_F'];
+            $affluenzaTotaleHA['vot_t'] += $dataAffluenzaRilevazioneSingola['MUNI_VOTERS_T'];
+            $affluenzaTotaleHA['vot_f'] += $dataAffluenzaRilevazioneSingola['MUNI_SEC'];
+            $affluenzaTotaleHA['sz_tot'] += $dataAffluenzaRilevazioneSingola['MUNI_SECT'];
+            $affluenzaTotaleHA['sz_perv'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
+            $affluenzaTotaleHA['sz_pres'] += $dataAffluenzaRilevazioneSingola['MUNI_SECP'];
+    
+        }
     }
 }    
 
