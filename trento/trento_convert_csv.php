@@ -116,7 +116,7 @@ $CodIstatComuneTmp = null;
 
 
 for ($i = 0; $i < $length; $i++) {
-	$prog_pres = $CodIstatComuneTmp;
+	$prog_pres = $dataVotiPresidenteAr[$i]['Progressivo Presidente'];
 	$dataVotiPresidenteAr[$i]['img_lis_c'] = $dataPicCandListaAr[$prog_pres]['img_lis_c'];
 	$votiValidiProvincia += $dataVotiPresidenteAr[$i]['Voti'];
 	if ($CodIstatComuneTmp <> $dataVotiPresidenteAr[$i]['Istat Comune']) {
