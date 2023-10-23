@@ -342,9 +342,14 @@ class scrutinio {
         $percVoti = 0;
         $votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['Schede Bianche'] + $candidatoAr['Schede nulle o contenenti solo voti nulli'] + $candidatoAr['Schede contestate e non attribuite']);
 
+/*         
         if ($candidatoAr['Voti'] > 0 && $this->jsonObject->int->vot_t > 0) {
             $percVoti = round((($candidatoAr['Voti']/$votiValidi)*100),2);
         }
+ */     
+        if ($candidatoAr['Voti'] > 0 && $candidatoAr['voti_validi_comune'] > 0) {
+            $percVoti = round((($candidatoAr['Voti']/$candidatoAr['voti_validi_comune'])*100),2);
+        }        
         $this->jsonObject->cand[$this->numeroCandidato]->perc = $percVoti; 
         $this->jsonObject->cand[$this->numeroCandidato]->d_nasc = ''; 
         $this->jsonObject->cand[$this->numeroCandidato]->l_nasc = ''; 
@@ -901,14 +906,15 @@ class enti {
 
                 // dati necessari per calcolo finale percentuale voti
                 $percVoti = 0;
-                $votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['Schede Bianche'] + $candidatoAr['Schede nulle o contenenti solo voti nulli'] + $candidatoAr['Schede contestate e non attribuite']);
+                //$votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['Schede Bianche'] + $candidatoAr['Schede nulle o contenenti solo voti nulli'] + $candidatoAr['Schede contestate e non attribuite']);
+                $votiValidi = $candidatoAr['voti_validi_provincia'];
 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->bianche = $candidatoAr['Schede Bianche']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nulle = $candidatoAr['Schede nulle o contenenti solo voti nulli']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nonAttribuite = $candidatoAr['Schede contestate e non attribuite'];
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->votiValidi = $votiValidi;
 
-                if ($candidatoAr['Voti'] > 0 && $this->jsonObject->int->vot_t > 0) {
+                if ($candidatoAr['Voti'] > 0 && $votiValidi > 0) {
                     $percVoti = round((($candidatoAr['Voti']/$votiValidi)*100),2);
                 }
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->perc = $percVoti; 
@@ -944,14 +950,15 @@ class enti {
                  * ATTENZIONE VERIFICARE CALCOLO VOTI VALIDI (FORSE VA CALCOLATO CON IL GENERALE)
                  */
                 $percVoti = 0;
-                $votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['Schede Bianche'] + $candidatoAr['Schede nulle o contenenti solo voti nulli'] + $candidatoAr['Schede contestate e non attribuite']);
+                //$votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['Schede Bianche'] + $candidatoAr['Schede nulle o contenenti solo voti nulli'] + $candidatoAr['Schede contestate e non attribuite']);
+                $votiValidi = $candidatoAr['voti_validi_provincia'];
 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->bianche += $candidatoAr['Schede Bianche']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nulle += $candidatoAr['Schede nulle o contenenti solo voti nulli']; 
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->nonAttribuite += $candidatoAr['Schede contestate e non attribuite'];
-                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->votiValidi += $votiValidi;
+//                $this->jsonObject->cand[$this->numeroCandidatoProvincia]->votiValidi += $votiValidi;
 
-                if ($this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti > 0 && $this->jsonObject->int->vot_t > 0) {
+                if ($this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti > 0 && $votiValidi > 0) {
                     $percVoti = round((($this->jsonObject->cand[$this->numeroCandidatoProvincia]->voti/$votiValidi)*100),2);
                 }
                 $this->jsonObject->cand[$this->numeroCandidatoProvincia]->perc = $percVoti; 

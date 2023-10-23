@@ -109,9 +109,33 @@ if (!$dataVotiPresidenteAr) {
 
 $length = count($dataVotiPresidenteAr);
 
+$votiValidiComune = 0;
+$votiValidiProvincia = 0;
+$CodIstatComuneTmp = null;
+
+
 for ($i = 0; $i < $length; $i++) {
-	$prog_pres = $dataVotiPresidenteAr[$i]['Progressivo Presidente'];
+	$prog_pres = $CodIstatComuneTmp;
 	$dataVotiPresidenteAr[$i]['img_lis_c'] = $dataPicCandListaAr[$prog_pres]['img_lis_c'];
+	$votiValidiProvincia += $dataVotiPresidenteAr[$i]['Voti'];
+	if ($CodIstatComuneTmp <> $dataVotiPresidenteAr[$i]['Istat Comune']) {
+		if ($CodIstatComuneTmp<>null) {
+//			$votiValidiProvincia += $votiValidiComune;
+//			$dataVotiPresidenteAr[$i]['voti_validi_provincia'] += $votiValidiComune;
+			$dataVotiPresidenteAr[$i]['voti_validi_comune'] = $votiValidiComune;
+		}
+		$CodIstatComuneTmp = $dataVotiPresidenteAr[$i]['Istat Comune'];
+		$votiValidiComune = 0;
+	} else {
+		$votiValidiComune += $dataVotiPresidenteAr[$i]['Voti'];
+	}
+}
+/** 
+ * Cicla di nuovo per aggiornare totale dei voti validi di comune e provincia
+*/
+
+for ($i = 0; $i < $length; $i++) {
+	$dataVotiPresidenteAr[$i]['voti_validi_provincia'] = $votiValidiProvincia;
 }
 
 
