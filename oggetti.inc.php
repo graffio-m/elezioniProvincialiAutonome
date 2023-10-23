@@ -778,9 +778,10 @@ class enti {
                     $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->img_lis_c = $singoloCand['img_lis_c']; 
                     
                     $percVotiLista = 0;
+                    $votiValidiTmp = $this->jsonObject->int->vot_t - ($this->jsonObject->int->sk_bianche + $this->jsonObject->int->sk_nulle);
                     $voti = $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->voti;
                     if ($voti > 0 && $this->jsonObject->int->vot_t > 0) {
-                        $percVotiLista = round((($voti/$this->jsonObject->int->vot_t)*100),2);
+                        $percVotiLista = round((($voti/$votiValidiTmp)*100),2);
                     }
                     $this->jsonObject->cand[$this->numeroCandidatoProvincia]->liste[$this->numeroListaProvincia]->perc = $percVotiLista; 
     
