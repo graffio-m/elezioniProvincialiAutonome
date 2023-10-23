@@ -239,8 +239,9 @@ class scrutinio {
                     
                     
                     $percVotiLista = 0;
+                    $votiValidiTmp = $this->jsonObject->int->vot_t - ($this->jsonObject->int->sk_bianche + $this->jsonObject->int->sk_nulle);
                     if ($singoloCand['CAND_VOTES'] > 0 && $this->jsonObject->int->vot_t > 0) {
-                        $percVotiLista = round((($singoloCand['CAND_VOTES']/$this->jsonObject->int->vot_t)*100),2);
+                        $percVotiLista = round((($singoloCand['CAND_VOTES']/$votiValidiTmp)*100),2);
                     }
                     $this->jsonObject->cand[$this->numeroCandidato]->liste[$this->numeroLista]->perc = $percVotiLista; 
 
