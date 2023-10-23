@@ -131,7 +131,7 @@ $cod_com_tmp = $dataAffluenzaTmpAr[0]['MUNI_NUM'];
  */
 foreach ($dataAffluenzaAr as $dataAffluenzaRilevazioneSingola) {
     if ($dataAffluenzaRilevazioneSingola['MUNI_HH'] == '21') {
-        if ($dataAffluenzaRilevazioneSingola['MUNI_NUM'] <> '21120') {
+        if ($dataAffluenzaRilevazioneSingola['MUNI_NUM'] <> '21120') { // Voti per corrispondenza
             $dataAffluenzaAr[] = $dataAffluenzaRilevazioneSingola;
             $affluenzaTotaleHA['ele_m'] = 0;
             $affluenzaTotaleHA['ele_f'] = 0;;
@@ -244,8 +244,11 @@ $comuneIstatTmp = 0;
 $votiValidiAr = array();
 $votiValidi = 0;
 $votiValidiProv = 0;
+$i = 0;
+$totRighe = count($dataVotiListeAr); 
 foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
     $muni_num = trim($dataVotiSingolaLista["MUNI_NUM"]);
+    $i++;
 	if ($comuneIstatTmp <> $dataVotiSingolaLista['MUNI_NUM']) {
         $votiValidiAr[$comuneIstatTmp] = $votiValidi;
         $votiValidiProv = $votiValidiProv + $votiValidi;
@@ -263,6 +266,9 @@ foreach ($dataVotiListeAr as $dataVotiSingolaLista) {
         }
         $dataVotiSingolaLista['img_lis_r'] = iconv('UTF-8', 'UTF-8//IGNORE',$dataNameLoghiListeAr[$ordineLista-1]['LIST_PICTURE']);
         $dataVotiListeHA[$comuneIstatTmp][$ordineLista] = $dataVotiSingolaLista;
+        if ($i == $totRighe) {
+            $votiValidiProv = $votiValidiProv + $votiValidi;
+        }
     } 
 }
     // cicla di nuovo per scrivere numero voti validi
