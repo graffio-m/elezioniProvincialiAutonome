@@ -338,6 +338,9 @@ class scrutinio {
         $this->jsonObject->cand[$this->numeroCandidato]->voti = $candidatoAr['Voti']; 
         $this->jsonObject->cand[$this->numeroCandidato]->id_Presidente = $candidatoAr['Presidente Id']; 
         $this->jsonObject->cand[$this->numeroCandidato]->img_lis_c = $candidatoAr['img_lis_c']; 
+        $this->jsonObject->cand[$this->numeroCandidato]->voti_validi_comune = $candidatoAr['voti_validi_comune']; 
+        $this->jsonObject->cand[$this->numeroCandidato]->voti_validi_provincia = $candidatoAr['voti_validi_provincia']; 
+
 
         $percVoti = 0;
         $votiValidi = $this->jsonObject->int->vot_t - ($candidatoAr['Schede Bianche'] + $candidatoAr['Schede nulle o contenenti solo voti nulli'] + $candidatoAr['Schede contestate e non attribuite']);

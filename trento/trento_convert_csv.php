@@ -109,6 +109,7 @@ if (!$dataVotiPresidenteAr) {
 
 $length = count($dataVotiPresidenteAr);
 
+$votiValidiComuneAr = array();
 $votiValidiComune = 0;
 $votiValidiProvincia = 0;
 $CodIstatComuneTmp = null;
@@ -120,21 +121,24 @@ for ($i = 0; $i < $length; $i++) {
 	$votiValidiProvincia += $dataVotiPresidenteAr[$i]['Voti'];
 	if ($CodIstatComuneTmp <> $dataVotiPresidenteAr[$i]['Istat Comune']) {
 		if ($CodIstatComuneTmp<>null) {
-//			$votiValidiProvincia += $votiValidiComune;
-//			$dataVotiPresidenteAr[$i]['voti_validi_provincia'] += $votiValidiComune;
-			$dataVotiPresidenteAr[$i]['voti_validi_comune'] = $votiValidiComune;
+			$votiValidiComuneAr[$CodIstatComuneTmp]['voti_validi_comune'] = $votiValidiComune;
 		}
 		$CodIstatComuneTmp = $dataVotiPresidenteAr[$i]['Istat Comune'];
-		$votiValidiComune = 0;
+		$votiValidiComune = $dataVotiPresidenteAr[$i]['Voti'];
 	} else {
 		$votiValidiComune += $dataVotiPresidenteAr[$i]['Voti'];
 	}
+	if ($i == ($length - 1)) {
+		$votiValidiComuneAr[$CodIstatComuneTmp]['voti_validi_comune'] = $votiValidiComune;		
+	}
 }
+
 /** 
  * Cicla di nuovo per aggiornare totale dei voti validi di comune e provincia
 */
-
 for ($i = 0; $i < $length; $i++) {
+	$CodIstatComuneTmp = $dataVotiPresidenteAr[$i]['Istat Comune'];
+	$dataVotiPresidenteAr[$i]['voti_validi_comune'] =  $votiValidiComuneAr[$CodIstatComuneTmp]['voti_validi_comune'];
 	$dataVotiPresidenteAr[$i]['voti_validi_provincia'] = $votiValidiProvincia;
 }
 
