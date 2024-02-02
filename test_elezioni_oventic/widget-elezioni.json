@@ -1,0 +1,548 @@
+{
+    "regioni": [
+        {
+            "note": null,
+            "cand": [
+                {
+                    "a_nome": "",
+                    "desc_lis_r": "Maurizio Fugatti",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "",
+                            "seggi": 0,
+                            "pos": 1,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-1-12.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#a02b3f",
+                    "sg_ass_c": 0,
+                    "nome": "Maurizio",
+                    "eletto": null,
+                    "d_nasc": 19691226000000,
+                    "l_nasc": "LATINA",
+                    "tot_vot_lis": 0,
+                    "perc": "45.31",
+                    "coalizioni": "",
+                    "pos": 1,
+                    "voti": 124595,
+                    "sg_ass_r": null,
+                    "perc_lis": "45.31",
+                    "cogn": "Fugatti",
+                    "img_lis_r": "7-20230212000000-1-12R.png"
+                },
+                {
+                    "a_nome": "",
+                    "desc_lis_r": "Giorgio Tonini",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Forza Italia",
+                            "seggi": 0,
+                            "pos": 2,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-2-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Fratelli D'Italia",
+                            "seggi": 0,
+                            "pos": 7,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-7-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Lista Civica Francesco Rocca Presidente",
+                            "seggi": 0,
+                            "pos": 3,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-3-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Unione Di Centro",
+                            "seggi": 0,
+                            "pos": 6,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-6-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Lega",
+                            "seggi": 0,
+                            "pos": 5,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-5-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Noi Moderati - Rinascimento Sgarbi",
+                            "seggi": 0,
+                            "pos": 17,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-17-12.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#00ccfc",
+                    "sg_ass_c": 0,
+                    "nome": "Giorgio ",
+                    "eletto": null,
+                    "d_nasc": 19650901000000,
+                    "l_nasc": "ROMA",
+                    "tot_vot_lis": 0,
+                    "perc": "24.63",
+                    "coalizioni": "",
+                    "pos": 2,
+                    "voti": 67721,
+                    "sg_ass_r": null,
+                    "perc_lis": "0",
+                    "cogn": "Tonini",
+                    "img_lis_r": "7-20230212000000-2-12R.png"
+                },
+                {
+                    "a_nome": "",
+                    "desc_lis_r": "Rossi Ugo Angelo Giovanni",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Unione Popolare",
+                            "seggi": 0,
+                            "pos": 8,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-8-12.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#de6e1d",
+                    "sg_ass_c": 0,
+                    "nome": "Rossi Ugo ",
+                    "eletto": null,
+                    "d_nasc": 19550104000000,
+                    "l_nasc": "MONTE SANT'ANGELO (FG)",
+                    "tot_vot_lis": 0,
+                    "perc": "12.05",
+                    "coalizioni": "",
+                    "pos": 3,
+                    "voti": 33123,
+                    "sg_ass_r": null,
+                    "perc_lis": "0",
+                    "cogn": "Angelo Giovanni",
+                    "img_lis_r": "7-20230212000000-3-12R.png"
+                },
+                {
+                    "a_nome": "",
+                    "desc_lis_r": "Filippo De Gasperi",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Movimento 5 Stelle",
+                            "seggi": 0,
+                            "pos": 10,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-10-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Polo Progressista Di Sinistra & Ecologista",
+                            "seggi": 0,
+                            "pos": 9,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-9-12.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#fff43f",
+                    "sg_ass_c": 0,
+                    "nome": "Filippo",
+                    "eletto": null,
+                    "d_nasc": 19631001000000,
+                    "l_nasc": "LA SPEZIA",
+                    "tot_vot_lis": 0,
+                    "perc": "6.89",
+                    "coalizioni": "",
+                    "pos": 4,
+                    "voti": 18947,
+                    "sg_ass_r": null,
+                    "perc_lis": "0",
+                    "cogn": "De Gasperi",
+                    "img_lis_r": "7-20230212000000-4-12R.png"
+                },
+                {
+                    "a_nome": "",
+                    "desc_lis_r": "Alessio D'Amato",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Verdi E Sinistra - Europa Verde - Possibile",
+                            "seggi": 0,
+                            "pos": 11,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-11-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Partito Democratico",
+                            "seggi": 0,
+                            "pos": 4,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-4-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Azione - Italia Viva",
+                            "seggi": 0,
+                            "pos": 15,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-15-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Demos Democrazia Solidale",
+                            "seggi": 0,
+                            "pos": 13,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-13-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "+Europa - Radicali Italiani - Volt",
+                            "seggi": 0,
+                            "pos": 12,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-12-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Lista Civica D'Amato Presidente",
+                            "seggi": 0,
+                            "pos": 16,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-16-12.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Partito Socialista Italiano",
+                            "seggi": 0,
+                            "pos": 14,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-14-12.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#ff0606",
+                    "sg_ass_c": 0,
+                    "nome": "Alessio",
+                    "eletto": null,
+                    "d_nasc": 19680313000000,
+                    "l_nasc": "ROMA",
+                    "tot_vot_lis": 0,
+                    "perc": "0",
+                    "coalizioni": "Centro Sinistra - Terzo Polo",
+                    "pos": 5,
+                    "voti": 0,
+                    "sg_ass_r": null,
+                    "perc_lis": "0",
+                    "cogn": "D'Amato",
+                    "img_lis_r": "7-20230212000000-5-12R.png"
+                }
+            ],
+            "int": {
+                "sk_contestate": 0,
+                "perc_vot": "64.05",
+                "sz_pres": 5306,
+                "fine_rip": "N",
+                "ele_f": 2489055,
+                "sk_bianche": 0,
+                "sg_spett_c": 40,
+                "sg_ass_c": 0,
+                "non_valid": null,
+                "sz_cons": 5306,
+                "ele_m": 2303541,
+                "desc_reg": "Trento",
+                "tot_vot_cand": 0,
+                "ele_t": 4792596,
+                "data_prec_elez": 20180304000000,
+                "sk_nulle": 0,
+                "sg_spett_r": 10,
+                "l_terr": "REGIONE",
+                "t_ele": "Regionali Speciali",
+                "dt_ele": 20230212000000,
+                "fine_pref": "N",
+                "area": "I",
+                "sz_tot": 5306,
+                "st": "ESERCIZIO",
+                "sg_ass_tot": 0,
+                "dt_agg": 20220925000000,
+                "vot_t": 0,
+                "cod_reg": 12,
+                "tot_vot_lis": 0,
+                "vot_f": 0,
+                "f_elet": "SCRUTINI",
+                "vot_m": 0,
+                "sg_ass_r": 0,
+                "reg_sto": 12
+            },
+            "note_din": []
+        },
+        {
+            "note": null,
+            "cand": [
+                {
+                    "a_nome": "",
+                    "desc_lis_r": "",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Lega - Salvini Per Fontana - Lega Lombarda",
+                            "seggi": 0,
+                            "pos": 12,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-12-03.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Lombardia Ideale - Fontana Presidente",
+                            "seggi": 0,
+                            "pos": 10,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-10-03.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Noi Moderati - Rinascimento Sgarbi - Fontana Presidente",
+                            "seggi": 0,
+                            "pos": 4,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-4-03.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Forza Italia - Berlusconi Per Fontana - Partito Popolare Europeo",
+                            "seggi": 0,
+                            "pos": 9,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-9-03.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Fratelli D'Italia - Giorgia Meloni",
+                            "seggi": 0,
+                            "pos": 5,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-5-03.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#00ccfc",
+                    "sg_ass_c": 0,
+                    "nome": "SVP SÜDTIROLER VOLKSPARTEI",
+                    "eletto": null,
+                    "d_nasc": 19520328000000,
+                    "l_nasc": "VARESE",
+                    "tot_vot_lis": 0,
+                    "perc": "41.89",
+                    "coalizioni": "",
+                    "pos": 1,
+                    "voti": 119109,
+                    "sg_ass_r": null,
+                    "perc_lis": "0",
+                    "cogn": "",
+                    "img_lis_r": "7-20230212000000-1-03R.png"
+                },
+                {
+                    "a_nome": "",
+                    "desc_lis_r": "",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Alleanza Verdi E Sinistra",
+                            "seggi": 0,
+                            "pos": 2,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-2-03.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Partito Democratico - Lombardia Democratica E Progressista - Majorino",
+                            "seggi": 0,
+                            "pos": 6,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-6-03.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Patto Civico - Majorino Presidente",
+                            "seggi": 0,
+                            "pos": 11,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-11-03.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Movimento 5 Stelle",
+                            "seggi": 0,
+                            "pos": 1,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-1-03.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#ff0606",
+                    "sg_ass_c": 0,
+                    "nome": "TEAM KÖLLENSPERGER",
+                    "eletto": null,
+                    "d_nasc": 19730514000000,
+                    "l_nasc": "MILANO",
+                    "tot_vot_lis": 0,
+                    "perc": "15.23",
+                    "coalizioni": "",
+                    "pos": 2,
+                    "voti": 43315,
+                    "sg_ass_r": null,
+                    "perc_lis": "0",
+                    "cogn": "",
+                    "img_lis_r": "7-20230212000000-2-03R.png"
+                },
+                {
+                    "a_nome": "",
+                    "desc_lis_r": "",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Unione Popolare",
+                            "seggi": 0,
+                            "pos": 7,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-7-03.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#de6e1d",
+                    "sg_ass_c": 0,
+                    "nome": "LEGA",
+                    "eletto": null,
+                    "d_nasc": 19810425000000,
+                    "l_nasc": "MILANO",
+                    "tot_vot_lis": 0,
+                    "perc": "11.08",
+                    "coalizioni": "",
+                    "pos": 3,
+                    "voti": 31515,
+                    "sg_ass_r": null,
+                    "perc_lis": "0",
+                    "cogn": "",
+                    "img_lis_r": "7-20230212000000-3-03R.png"
+                },
+                {
+                    "a_nome": "Verdi - Grüne - Verc",
+                    "desc_lis_r": "",
+                    "liste": [
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Azione - Italia Viva",
+                            "seggi": 0,
+                            "pos": 8,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-8-03.png",
+                            "rif_nota": null
+                        },
+                        {
+                            "perc": "0",
+                            "desc_lis_c": "Letizia Moratti Presidente",
+                            "seggi": 0,
+                            "pos": 3,
+                            "voti": 0,
+                            "img_lis_c": "7-20230212000000-3-03.png",
+                            "rif_nota": null
+                        }
+                    ],
+                    "color": "#8e215f",
+                    "sg_ass_c": 0,
+                    "nome": "VERDI - GRÜNE - VERC",
+                    "eletto": null,
+                    "d_nasc": 19491126000000,
+                    "l_nasc": "MILANO",
+                    "tot_vot_lis": 0,
+                    "perc": "6.82",
+                    "coalizioni": "",
+                    "pos": 4,
+                    "voti": 19392,
+                    "sg_ass_r": null,
+                    "perc_lis": "0",
+                    "cogn": "",
+                    "img_lis_r": "7-20230212000000-4-03R.png"
+                }
+            ],
+            "int": {
+                "sk_contestate": 0,
+                "perc_vot": "70.18",
+                "sz_pres": 0,
+                "fine_rip": "N",
+                "ele_f": 4096959,
+                "sk_bianche": 0,
+                "sg_spett_c": 79,
+                "sg_ass_c": 0,
+                "non_valid": null,
+                "sz_cons": 495,
+                "ele_m": 3913684,
+                "desc_reg": "Bolzano",
+                "tot_vot_cand": 0,
+                "ele_t": 8010643,
+                "data_prec_elez": 20180304000000,
+                "sk_nulle": 0,
+                "sg_spett_r": 0,
+                "l_terr": "REGIONE",
+                "t_ele": "Regionali Speciali",
+                "dt_ele": 20230212000000,
+                "fine_pref": "N",
+                "area": "I",
+                "sz_tot": 495,
+                "st": "ESERCIZIO",
+                "sg_ass_tot": 0,
+                "dt_agg": 20220925000000,
+                "vot_t": 0,
+                "cod_reg": 3,
+                "tot_vot_lis": 0,
+                "vot_f": 0,
+                "f_elet": "SCRUTINI",
+                "vot_m": 0,
+                "sg_ass_r": 0,
+                "reg_sto": 3
+            },
+            "note_din": []
+        }
+    ],
+    "int": {
+        "dt_agg": 20230625000000,
+        "vot_f": 0,
+        "ele_t": 417968,
+        "vot_t": 293320,
+        "perc_vot": "70.18",
+        "ele_f": 6586014,
+        "vot_m": 0,
+        "ele_m": 6217225
+    }
+}
