@@ -29,7 +29,7 @@ usort($voti_presidente, function($a, $b) {
     return $b['voti'] - $a['voti'];
 });
 
-print_r($voti_presidente);
+//print_r($voti_presidente);
 //die();
 // CSV file path
 $csvFilePath = 'output.csv';
@@ -67,5 +67,25 @@ foreach ($voti_presidente as $row) {
 fclose($csvFile);
 
 echo 'CSV file has been generated successfully at ' . $csvFilePath . PHP_EOL;
+
+// Ottieni la data corrente
+$currentDateTime = date('d.m.Y H:i');
+
+// Definisci l'array associativo
+$data = [
+    'annotate' => [
+        'notes' => "Ultimo Aggiornamento: $currentDateTime"
+    ]
+];
+// Converte l'array associativo in una stringa JSON
+$jsonString = json_encode($data, JSON_PRETTY_PRINT);
+
+// Specifica il percorso del file JSON
+$filePath = 'output.json';
+
+// Scrivi la stringa JSON nel file
+file_put_contents($filePath, $jsonString);
+
+echo "Il file JSON è stato creato con successo.\n";
 
 ?>
