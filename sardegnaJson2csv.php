@@ -66,7 +66,7 @@ foreach ($voti_presidente as $row) {
 
 fclose($csvFile);
 
-echo 'CSV file has been generated successfully at ' . $csvFilePath . PHP_EOL;
+echo 'CSV file has been generated successfully at ' . $csvFilePath . PHP_EOL.'<BR>\n';
 
 // Ottieni la data corrente
 $currentDateTime = date('d.m.Y H:i');
@@ -86,6 +86,6 @@ $filePath = 'output.json';
 // Scrivi la stringa JSON nel file
 file_put_contents($filePath, $jsonString);
 
-echo "Il file JSON è stato creato con successo.\n";
+echo "<br>Il file JSON è stato creato con successo alle .$currentDateTime\n";
 
 ?>
