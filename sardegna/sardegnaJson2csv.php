@@ -19,7 +19,7 @@
 // Server SFTP settings
 $sftp_server = 'oventic.graffio.org';
 $sftp_username = 'graffio';
-$sftp_password = 'Maur1208#';
+$sftp_password = 'XXXXXXX';
 $remote_directory = '/var/www/html/grav/sardegna/';
 
 
@@ -119,10 +119,6 @@ file_put_contents($jsonFilePath, $jsonString);
 
 echo "<br>Il file JSON è stato creato con successo alle .$currentDateTime\n";
 
-
-// Local files to upload
-$file1 = '/path/to/local/file1.txt';
-$file2 = '/path/to/local/file2.txt';
 
 // Remote directory on the SFTP server
 
