@@ -22,6 +22,7 @@ $sftp_username = 'user';
 $sftp_password = 'password';
 $remote_directory = '/var/www/html/sardegna/';
 
+$csvFilePartitiPath = 'dati_elezioni_partiti_feb_2024.csv'; 
 
 
 $csvFilePath = 'dati_elezioni_feb_2024.csv'; 
@@ -31,3 +32,4 @@ $jsonFilePath = 'metadati_sardegna.json';
 
 // URL of the JSON data
 $jsonUrl = 'https://amministrazioneaperta.regione.sardegna.it/feedprovasier2019.php';
+$imageBaseURL = 'https://amministrazioneaperta.regione.sardegna.it';
