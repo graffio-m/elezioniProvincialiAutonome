@@ -1,36 +1,7 @@
 <?php
 
-/**
- * Impostazione nomi file e URL
- */
+include_once 'config.inc.php';
 
-/**
- * 
-
- Path dati per dataWrapper
- https://www.rainews.it/dl/rainews/elezioni2024/sardegna/dati_elezioni_feb_2024.csv
-
- Path metadati per dataWrapper
- https://www.rainews.it/dl/rainews/elezioni2024/sardegna/metadati_sardegna.json
-
- */
-
-
-// Server SFTP settings
-$sftp_server = 'oventic.graffio.org';
-$sftp_username = 'graffio';
-$sftp_password = 'XXXXXXX';
-$remote_directory = '/var/www/html/grav/sardegna/';
-
-
-
-$csvFilePath = 'dati_elezioni_feb_2024.csv'; 
-
- // Specifica il percorso del file JSON
-$jsonFilePath = 'metadati_sardegna.json';
-
-// URL of the JSON data
-$jsonUrl = 'https://amministrazioneaperta.regione.sardegna.it/feedprovasier2019.php';
 
 // Fetch JSON content from the URL
 $jsonData = file_get_contents($jsonUrl);
@@ -42,11 +13,17 @@ if ($jsonData === false) {
 // Decode JSON data
 $data = json_decode($jsonData, true);
 
-
-
 $regionali = $data['stats']['regionale']['risultati'];
 $voti_presidente = $regionali['voti_presidente'];
 $voti_presidente['dati_generali'] = 'sezioni scrutinate: '. $voti_presidente['sezioni_scrutinate'];
+
+$voti_lista = $regionali['voti_lista'];
+unset($voti_lista['sezioni_scrutinate']);
+unset($voti_lista['voti_tot']);
+unset($voti_lista['consolidato']);
+unset($voti_lista['aggiornamento']);
+
+
 
 /** dati per aggiornamento (Json)
  * 
@@ -70,6 +47,26 @@ unset($voti_presidente['aggiornamento']);
 unset($voti_presidente['consolidato']);
 $dati_generali = $voti_presidente['dati_generali'];
 unset($voti_presidente['dati_generali']);
+
+foreach ($voti_presidente as $key => &$item) {
+    $item['id_presidente'] = $key;
+}
+/**
+ * Ordinamento dell'array $voti_liste per id_presidente e voti
+ */
+// Definisci la funzione di confronto per usort
+function confronto($a, $b) {
+    if ($a['id_presidente'] == $b['id_presidente']) {
+        // Se id_presidente è uguale, ordina per voti in ordine decrescente
+        return $b['voti'] - $a['voti'];
+    }
+    // Altrimenti, ordina per id_presidente in ordine crescente
+    return $a['id_presidente'] - $b['id_presidente'];
+}
+
+// Ordina il secondo array utilizzando la funzione di confronto
+usort($voti_lista, 'confronto');
+
 
 // Sort the array based on the "voti" key in descending order
 usort($voti_presidente, function($a, $b) {
@@ -99,6 +96,66 @@ fclose($csvFile);
 
 echo 'CSV file has been generated successfully at ' . $csvFilePath . PHP_EOL.'<BR>\n';
 
+/**
+ * costruzione array per tabella candidato e liste
+* Unisci i due array in base all'id_presidente
+*/
+$voti_presidente_liste = array();
+foreach ($voti_presidente as $presidente) {
+    $imageValue = "![Candidato](".$imageBaseURL.$presidente['image'].')';
+    unset($presidente['image']);
+    $presidente = array('image' => $imageValue) + $presidente;
+    $presidente['denominazione'] = '**'.$presidente['denominazione'].'**';
+    unset($presidente['denominazione_coalizione']);
+    unset($presidente['voti_coalizione']);
+    unset($presidente['percent_coalizione']);
+    $voti_presidente_liste[] = $presidente;
+    foreach ($voti_lista as $item) {
+        if ($item['id_presidente'] == $presidente['id_presidente']) {
+            $id_presidente = $item['id_presidente'];
+            unset($item['id_presidente']);
+            $item['id_presidente'] = $id_presidente;
+
+            //$imageValue = $item['image'];
+            $imageValue = null;
+            unset($item['image']);
+            $item = array('image' => $imageValue) + $item;
+
+            $voti_presidente_liste[] = $item;
+
+        }
+    }
+    
+}
+/* var_dump($voti_presidente_liste);
+die();
+ */
+
+/**
+ * Scrittura csv per tabella
+ */
+// Open the CSV file for writing
+$csvFile = fopen($csvFilePartitiPath, 'w');
+
+// Write the header row to the CSV file
+if (!empty($voti_presidente)) {
+    $headerP = array (
+        '','Candidati e liste','Voti','%'
+    );
+    fputcsv($csvFile, $headerP);
+}
+
+// Write the data rows to the CSV file
+foreach ($voti_presidente_liste as $row) {
+    fputcsv($csvFile, $row);
+}
+
+fclose($csvFile);
+
+echo 'CSV file has been generated successfully at ' . $csvFilePartitiPath . PHP_EOL.'<BR>\n';
+
+
+
 // Ottieni la data corrente
 $currentDateTime = date('d.m.Y H:i');
 
@@ -108,7 +165,7 @@ $data = [
         'notes' => "Ultimo Aggiornamento: $oraAggiornamento"
     ],
     'describe' => [
-        'intro' => "Voti ai candidati presidenti. Sezioni scrutinate: $sezioniScrutinate su $sezioniTotali"
+        'intro' => "Sezioni scrutinate: $sezioniScrutinate su $sezioniTotali. Ultimo Aggiornamento: $oraAggiornamento"
     ]
 ];
 // Converte l'array associativo in una stringa JSON
@@ -146,13 +203,19 @@ if (ssh2_auth_password($sftp_conn, $sftp_username, $sftp_password)) {
         echo "Error uploading file 2.\n";
     }
 
+
+    // Upload file 3
+    $remote_file3 = "ssh2.sftp://$sftp$remote_directory" . basename($csvFilePartitiPath);
+    if (copy($csvFilePartitiPath, $remote_file3)) {
+        echo "File 3 uploaded successfully.\n";
+    } else {
+        echo "Error uploading file 3.\n";
+    }
+
     // Close SFTP connection
     ssh2_disconnect($sftp_conn);
 } else {
     echo "SFTP connection or login failed.\n";
 }
-
-?>
-
 
 ?>
