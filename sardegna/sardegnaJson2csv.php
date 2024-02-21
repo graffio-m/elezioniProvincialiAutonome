@@ -2,9 +2,24 @@
 
 include_once 'config.inc.php';
 
+$ch = curl_init($jsonUrl);
+
+$userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
+curl_setopt($ch, CURLOPT_USERAGENT, $userAgent);
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// Set other options if needed
+
+$jsonData = curl_exec($ch);
+
+if ($jsonData === false) {
+    echo 'cURL error: ' . curl_error($ch);
+}
+
+curl_close($ch);
 
 // Fetch JSON content from the URL
-$jsonData = file_get_contents($jsonUrl);
+//$jsonData = file_get_contents($jsonUrl);
 
 if ($jsonData === false) {
     die('Error fetching JSON data from the URL');
