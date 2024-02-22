@@ -1,6 +1,7 @@
 <?php
 
 include_once 'config.inc.php';
+$pathMio = dirname(__FILE__);
 
 $ch = curl_init($jsonUrl);
 
@@ -65,6 +66,12 @@ unset($voti_presidente['dati_generali']);
 
 foreach ($voti_presidente as $key => &$item) {
     $item['id_presidente'] = $key;
+    $imagePres = $item['image'];
+    unset($item['image']); 
+    unset($item['denominazione_coalizione']); 
+    $item['denominazione'] = '**'.$item['denominazione'].'**';
+    $imagePresValue = "![Candidato](".$imageBaseURL.$imagePres.')';
+    $item = array('image' => $imagePresValue) + $item;
 }
 /**
  * Ordinamento dell'array $voti_liste per id_presidente e voti
@@ -88,9 +95,11 @@ usort($voti_presidente, function($a, $b) {
     return $b['voti'] - $a['voti'];
 });
 
-//print_r($voti_presidente);
-//die();
-
+/**  
+var_dump($voti_lista);
+die(); 
+*/
+$csvFilePath = $pathMio.'/'.$csvFilePath;
 // Open the CSV file for writing
 $csvFile = fopen($csvFilePath, 'w');
 
@@ -98,7 +107,11 @@ $csvFile = fopen($csvFilePath, 'w');
 
 // Write the header row to the CSV file
 if (!empty($voti_presidente)) {
-    $header = array_keys($voti_presidente[key($voti_presidente)]);
+    $header = array (
+        '','Candidati','Voti','%'
+    );
+
+//    $header = array_keys($voti_presidente[key($voti_presidente)]);
     fputcsv($csvFile, $header);
 }
 
@@ -117,26 +130,26 @@ echo 'CSV file has been generated successfully at ' . $csvFilePath . PHP_EOL.'<B
 */
 $voti_presidente_liste = array();
 foreach ($voti_presidente as $presidente) {
-    $imageValue = "![Candidato](".$imageBaseURL.$presidente['image'].')';
-    unset($presidente['image']);
-    $presidente = array('image' => $imageValue) + $presidente;
-    $presidente['denominazione'] = '**'.$presidente['denominazione'].'**';
+//    $imageValue = "![Candidato](".$imageBaseURL.$presidente['image'].')';
+//    unset($presidente['image']);
+//    $presidente = array('image' => $imageValue) + $presidente;
+//    $presidente['denominazione'] = '**'.$presidente['denominazione'].'**';
     unset($presidente['denominazione_coalizione']);
     unset($presidente['voti_coalizione']);
     unset($presidente['percent_coalizione']);
     $voti_presidente_liste[] = $presidente;
-    foreach ($voti_lista as $item) {
-        if ($item['id_presidente'] == $presidente['id_presidente']) {
-            $id_presidente = $item['id_presidente'];
-            unset($item['id_presidente']);
-            $item['id_presidente'] = $id_presidente;
+    foreach ($voti_lista as $voti_una_lista) {
+        if ($voti_una_lista['id_presidente'] == $presidente['id_presidente']) {
+            $id_presidente = $voti_una_lista['id_presidente'];
+            unset($voti_una_lista['id_presidente']);
+            $voti_una_lista['id_presidente'] = $id_presidente;
 
             //$imageValue = $item['image'];
             $imageValue = null;
-            unset($item['image']);
-            $item = array('image' => $imageValue) + $item;
+            unset($voti_una_lista['image']);
+            $voti_una_lista = array('image' => $imageValue) + $voti_una_lista;
 
-            $voti_presidente_liste[] = $item;
+            $voti_presidente_liste[] = $voti_una_lista;
 
         }
     }
@@ -150,6 +163,9 @@ die();
  * Scrittura csv per tabella
  */
 // Open the CSV file for writing
+
+$csvFilePartitiPath = $pathMio.'/'.$csvFilePartitiPath;
+
 $csvFile = fopen($csvFilePartitiPath, 'w');
 
 // Write the header row to the CSV file
@@ -187,6 +203,8 @@ $data = [
 $jsonString = json_encode($data, JSON_PRETTY_PRINT);
 
 // Scrivi la stringa JSON nel file
+$jsonFilePath = $pathMio.'/'.$jsonFilePath;
+
 file_put_contents($jsonFilePath, $jsonString);
 
 echo "<br>Il file JSON è stato creato con successo alle .$currentDateTime\n";
