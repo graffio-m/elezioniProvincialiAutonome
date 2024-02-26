@@ -19,6 +19,13 @@ if ($jsonData === false) {
 
 curl_close($ch);
 
+$imgPres = array();
+$imgPres['16'] = 'https://www.rainews.it/dl/img/2024/02/26/1708940758515_chessa.png';
+$imgPres['13'] = 'https://www.rainews.it/dl/img/2024/02/26/1708940966709_todde.png';
+$imgPres['14'] = 'https://www.rainews.it/dl/img/2024/02/26/1708941053790_soru.png';
+$imgPres['15'] = 'https://www.rainews.it/dl/img/2024/02/26/1708941113617_truzzu.png';
+
+
 // Fetch JSON content from the URL
 //$jsonData = file_get_contents($jsonUrl);
 
@@ -66,11 +73,13 @@ unset($voti_presidente['dati_generali']);
 
 foreach ($voti_presidente as $key => &$item) {
     $item['id_presidente'] = $key;
+    $id_pres_img = $item['id_presidente'];
     $imagePres = $item['image'];
     unset($item['image']); 
     unset($item['denominazione_coalizione']); 
     $item['denominazione'] = '**'.$item['denominazione'].'**';
-    $imagePresValue = "![Candidato](".$imageBaseURL.$imagePres.')';
+//    $imagePresValue = "![Candidato](".$imageBaseURL.$imagePres.')';
+    $imagePresValue = "![Candidato](".$imgPres[$id_pres_img].')';
     $item = array('image' => $imagePresValue) + $item;
 }
 /**
